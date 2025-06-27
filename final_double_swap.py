@@ -11,7 +11,7 @@ np.random.seed(28)
 
 # plot design choices
 plt.rcParams["figure.dpi"] = 500
-plt.rcParams['text.usetex'] = True
+plt.rcParams['text.usetex'] = False
 
 # output choices
 num_sets = 100
@@ -37,7 +37,7 @@ for set_num in tqdm(range(num_sets)):
         
         # load data
         model = data_models[model_num]
-        file = np.load(f'Data/{model}/{set_num}.npz',allow_pickle=True)
+        file = np.load(f'Data/0.npz',allow_pickle=True)
         data,truth,VW = list(file['data']),file['track'],file['VW']
         [µ0,µ1,sy,area] = file['hyperparameters']
         motion_pars = file['all_motion_pars']
@@ -149,22 +149,22 @@ for set_num in tqdm(range(num_sets)):
     
         ### view results ###
         
-        # if set_num == 0:
-        #     # plot observations
-        #     f.plot_data(data,'#555555',0.2)
-        #     # plot tracks
-        #     f.plot_track(truth,'goldenrod','-','Truth')
-        #     if wanting_ise1:
-        #         f.add_track_unc(X[0,:,:],S[0,:],'deepskyblue')
-        #         f.plot_track(X[0,:,:],'deepskyblue','--','iSE-1')
-        #     if wanting_ise2:
-        #         f.add_track_unc(X[1,:,:],S[1,:],'blueviolet')
-        #         f.plot_track(X[1,:,:],'blueviolet',(0,(3,2)),'iSE-2')
-        #     if wanting_se:
-        #         f.add_track_unc(X[2,:,:],S[2,:],'deeppink')
-        #         f.plot_track(X[2,:,:],'deeppink',(1,(3,2)),'SE')
-        #     # show plot neatly
-        #     f.tidy_plot(VW,x_name='',y_name='',legend_loc=4)
+        if set_num == 0:
+            # plot observations
+            f.plot_data(data,'#555555',0.2)
+            # plot tracks
+            f.plot_track(truth,'goldenrod','-','Truth')
+            if wanting_ise1:
+                f.add_track_unc(X[0,:,:],S[0,:],'deepskyblue')
+                f.plot_track(X[0,:,:],'deepskyblue','--','iSE-1')
+            if wanting_ise2:
+                f.add_track_unc(X[1,:,:],S[1,:],'blueviolet')
+                f.plot_track(X[1,:,:],'blueviolet',(0,(3,2)),'iSE-2')
+            if wanting_se:
+                f.add_track_unc(X[2,:,:],S[2,:],'deeppink')
+                f.plot_track(X[2,:,:],'deeppink',(1,(3,2)),'SE')
+            # show plot neatly
+            f.tidy_plot(VW,x_name='',y_name='',legend_loc=4)
     
         # compute RMSEs
         rmse_ise1 = ((X[0,:,:] - truth)**2).sum(1).mean()**0.5

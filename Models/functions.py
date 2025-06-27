@@ -97,6 +97,7 @@ def ise1_pred(t,m,v,s2,l):
     
     # compute Fk
     d = m.shape[0]
+    #print("D current for the ise one is:", d)
     ftw = solve(C[1:,1:],C[1:,0])
     F = np.eye(d-1,k=-1)
     F[0,:] = ftw

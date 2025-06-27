@@ -17,6 +17,7 @@ def gise1_pred(t,m,v,s2,l,sigma_p=0.0):
 
      # compute Fk
     d = m.shape[0] - 1 #To account for the goal dimension in the state
+    #print("D is currently:", d)
     ftw = solve(C[1:,1:],C[1:,0])
     F = np.eye(d-1,k=-1)
     F[0,:] = ftw
