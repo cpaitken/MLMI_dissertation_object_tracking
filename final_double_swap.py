@@ -51,7 +51,7 @@ for set_num in tqdm(range(num_sets)):
         
         # make design / parameter choices (common to all methods)
         assoc_threshold = 5
-        d = 10
+        d = 5
         t = dt * np.arange(d,0,-1)
     
         # make individual parameter choices
@@ -100,7 +100,8 @@ for set_num in tqdm(range(num_sets)):
                 
                 # predict step
                 if i == 0:
-                    m_pred,v_pred = f.ise1_pred(t+dt*(k+1),mk[-1],vk[-1],s2,ell)
+                    print("Shape of mk[-1] is:", mk[-1].shape)
+                    m_pred,v_pred,F_aug = f.ise1_pred(t+dt*(k+1),mk[-1],vk[-1],s2,ell)
                 elif i == 1:
                     m_pred,v_pred = f.ise2_pred(t,mk[-1],vk[-1],s2,ell)
                 elif i == 2:

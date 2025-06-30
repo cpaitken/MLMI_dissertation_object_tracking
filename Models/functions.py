@@ -97,12 +97,12 @@ def ise1_pred(t,m,v,s2,l):
     
     # compute Fk
     d = m.shape[0]
-    #print("D current for the ise one is:", d)
     ftw = solve(C[1:,1:],C[1:,0])
     F = np.eye(d-1,k=-1)
     F[0,:] = ftw
     F_aug = np.eye(d)
     F_aug[:-1,:-1] = F
+
     
     # compute Pk
     ptw = C[0,0] - (C[0,1:] * ftw).sum()
@@ -113,7 +113,7 @@ def ise1_pred(t,m,v,s2,l):
     m_pred = F_aug @ m
     v_pred = F_aug @ v @ F_aug.T + P
     
-    return m_pred,v_pred
+    return m_pred,v_pred,F_aug
 
 #####################
 # Extended Goal State
@@ -317,7 +317,7 @@ def update_ise1(datum,m,v,sy):
     m_up = m + Kgain @ y_in
     v_up = v - Kgain @ v[[0,-1],:].sum(0).reshape([1,-1])
     
-    return m_up,v_up
+    return m_up,v_up, Kgain, y_in
 
 
 

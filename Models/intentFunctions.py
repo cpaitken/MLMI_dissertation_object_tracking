@@ -17,7 +17,6 @@ def gise1_pred(t,m,v,s2,l,sigma_p=0.0):
 
      # compute Fk
     d = m.shape[0] - 1 #To account for the goal dimension in the state
-    #print("D is currently:", d)
     ftw = solve(C[1:,1:],C[1:,0])
     F = np.eye(d-1,k=-1)
     F[0,:] = ftw
@@ -33,6 +32,12 @@ def gise1_pred(t,m,v,s2,l,sigma_p=0.0):
     F_goal = np.eye(d+1)
     F_goal[:d, :d] = F_aug
 
+    ##Experiment to see if positions lead to goal
+    beta = 0.5
+    for i in range(d):
+        F_goal[i,-1] = beta
+    ##End of experimental section
+
     P_goal = np.zeros((d+1, d+1))
     P_goal[:d, :d] = P
     P_goal[d,d] = sigma_p
@@ -41,13 +46,16 @@ def gise1_pred(t,m,v,s2,l,sigma_p=0.0):
     m_pred = F_goal @ m
     v_pred = F_goal @ v @ F_goal.T + P_goal  
 
-    return m_pred, v_pred
+    return m_pred, v_pred, F_goal
 
 def augmented_update(y, m, v, sy):
     #Mapping matrix H for the observation model that includes the latent goal
     H = np.zeros((1, m.shape[0]))
     H[0,0] = 1 #Include most recent position
-    H[0, -1] = 1 #Include latent goal
+    #Just experimenting with the measurement model
+    #H[0, -1] = 1 #Include latent goal
+    H[0, -2] = 1 #Include the initial position (as is done in the iSE-1 model)
+
 
     #Calculate Kalman Gain
     Hv = H @ v
@@ -59,6 +67,6 @@ def augmented_update(y, m, v, sy):
 
     #Update state
     m_up = m + KG @ y_in
-    v_up = v - KG @ v[[0,-1], :].sum(0).reshape([1,-1])
+    v_up = v - KG @ H @ v
 
-    return m_up, v_up
+    return m_up, v_up, KG, y_in
