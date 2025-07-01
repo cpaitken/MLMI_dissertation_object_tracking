@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Models.functions as f
 from tqdm import tqdm
+from dataFunctions import save_matrix_array_txt, save_vector_array_txt
 
 
 # set seed
@@ -28,7 +29,9 @@ data_models = ['iSE_1','iSE_2','SE']
 rmse = np.zeros([num_sets,3,3]) # index: set number, data model, inference model
 
 
-
+ise_F_aug = []
+predicted_means = []
+updated_means = []
 
 
 for set_num in tqdm(range(num_sets)):
@@ -100,8 +103,9 @@ for set_num in tqdm(range(num_sets)):
                 
                 # predict step
                 if i == 0:
-                    print("Shape of mk[-1] is:", mk[-1].shape)
                     m_pred,v_pred,F_aug = f.ise1_pred(t+dt*(k+1),mk[-1],vk[-1],s2,ell)
+                    predicted_means.append(m_pred.copy())
+                    ise_F_aug.append(F_aug.copy())
                 elif i == 1:
                     m_pred,v_pred = f.ise2_pred(t,mk[-1],vk[-1],s2,ell)
                 elif i == 2:
@@ -121,7 +125,8 @@ for set_num in tqdm(range(num_sets)):
                         associations[i,k] = ind
                         datum = obs[ind,:]
                         if i == 0:
-                            m_up,v_up = f.update_ise1(datum,m_pred,v_pred,sy)
+                            m_up,v_up, KG, y_in = f.update_ise1(datum,m_pred,v_pred,sy)
+                            updated_means.append(m_up.copy())
                         else:
                             m_up,v_up = f.update(datum,m_pred,v_pred,sy)
                     else:
@@ -145,35 +150,38 @@ for set_num in tqdm(range(num_sets)):
             
         #####################
     
-    
+    #Save the results
+    save_matrix_array_txt(ise_F_aug, "doubleSwapise_F_aug.txt", "F_aug for iSE")
+    save_vector_array_txt(predicted_means, "doubleSwap_predicted_means.txt", "Predicted means for iSE")
+    save_vector_array_txt(updated_means, "doubleSwap_updated_means.txt", "Updated means for iSE")
     
     
         ### view results ###
         
-        if set_num == 0:
-            # plot observations
-            f.plot_data(data,'#555555',0.2)
-            # plot tracks
-            f.plot_track(truth,'goldenrod','-','Truth')
-            if wanting_ise1:
-                f.add_track_unc(X[0,:,:],S[0,:],'deepskyblue')
-                f.plot_track(X[0,:,:],'deepskyblue','--','iSE-1')
-            if wanting_ise2:
-                f.add_track_unc(X[1,:,:],S[1,:],'blueviolet')
-                f.plot_track(X[1,:,:],'blueviolet',(0,(3,2)),'iSE-2')
-            if wanting_se:
-                f.add_track_unc(X[2,:,:],S[2,:],'deeppink')
-                f.plot_track(X[2,:,:],'deeppink',(1,(3,2)),'SE')
-            # show plot neatly
-            f.tidy_plot(VW,x_name='',y_name='',legend_loc=4)
+#         if set_num == 0:
+#             # plot observations
+#             f.plot_data(data,'#555555',0.2)
+#             # plot tracks
+#             f.plot_track(truth,'goldenrod','-','Truth')
+#             if wanting_ise1:
+#                 f.add_track_unc(X[0,:,:],S[0,:],'deepskyblue')
+#                 f.plot_track(X[0,:,:],'deepskyblue','--','iSE-1')
+#             if wanting_ise2:
+#                 f.add_track_unc(X[1,:,:],S[1,:],'blueviolet')
+#                 f.plot_track(X[1,:,:],'blueviolet',(0,(3,2)),'iSE-2')
+#             if wanting_se:
+#                 f.add_track_unc(X[2,:,:],S[2,:],'deeppink')
+#                 f.plot_track(X[2,:,:],'deeppink',(1,(3,2)),'SE')
+#             # show plot neatly
+#             f.tidy_plot(VW,x_name='',y_name='',legend_loc=4)
     
-        # compute RMSEs
-        rmse_ise1 = ((X[0,:,:] - truth)**2).sum(1).mean()**0.5
-        rmse_ise2 = ((X[1,:,:] - truth)**2).sum(1).mean()**0.5
-        rmse_se = ((X[2,:,:] - truth)**2).sum(1).mean()**0.5
-        rmse[set_num,model_num,:] = [rmse_ise1,rmse_ise2,rmse_se]
+#         # compute RMSEs
+#         rmse_ise1 = ((X[0,:,:] - truth)**2).sum(1).mean()**0.5
+#         rmse_ise2 = ((X[1,:,:] - truth)**2).sum(1).mean()**0.5
+#         rmse_se = ((X[2,:,:] - truth)**2).sum(1).mean()**0.5
+#         rmse[set_num,model_num,:] = [rmse_ise1,rmse_ise2,rmse_se]
 
-# average RMSE
-aRMSE = rmse.mean(0)
-print()
-print(aRMSE)
+# # average RMSE
+# aRMSE = rmse.mean(0)
+# print()
+# print(aRMSE)

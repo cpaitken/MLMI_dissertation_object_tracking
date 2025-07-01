@@ -195,7 +195,7 @@ def se_pred(t,m,v,s2,l):
     m_pred = F @ m
     v_pred = F @ v @ F.T + P
     
-    return m_pred,v_pred
+    return m_pred,v_pred, F
 
 #####################
 #####################
@@ -301,7 +301,7 @@ def update(datum,m,v,sy):
     m_up = m + Kgain @ y_in
     v_up = v - Kgain @ v[0,:].reshape([1,-1])
     
-    return m_up,v_up
+    return m_up,v_up, Kgain, y_in
 
 
 # update ise1 by association

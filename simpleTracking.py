@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Models.functions as f
 import Models.intentFunctions as iF
-from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse
+from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot
 from tqdm import tqdm
 
 groundtruth = np.load('ground_truth_trajectory.npy') #This is fake for the moment, obviously
@@ -26,7 +26,7 @@ noisy_data = [groundtruth[k] + np.random.normal(0, sy, 2) for k in range(Tmax)]
 
 
 ## Goal Creation ##
-G_prior = np.array([[5.0, 5.0]])
+G_prior = np.array([[10.0, 10.0]])
 G_var = 1  #Unsure goal initially
 
 #if non_goalModel:
@@ -43,6 +43,7 @@ mk = [groundtruth[0, :] * np.ones([d, 2])]
 mk[0][:-1] -= mk[0][-1]
 mk[0] = np.vstack((mk[0], G_prior))
 
+#TAKE ANOTHER LOOK AT THIS - COULD BE WRONG INITIALIZATION
 vk = [np.eye(d+1)]
 vk[0][:-2, :-2] = f.iSE(t[1:], t[1:], 0.1, 1.0)
 vk[0][-2, -2] = 0.1
@@ -132,22 +133,14 @@ for k in range(Tmax):
     mk.append(m_up)
     vk.append(v_up)
     X[k, :] = m_up[0, :] + m_up[-2, :] #Predicted most recent location
-    #X[k, :] = m_up[0, :] + +m_up[-2, :] + m_up[-1, :] #Predicted most recent location
+    #X[k, :] = m_up[0, :] + +m_up[-2, :] + m_up[-1, :] #Predicted most recent location and goal
     G[k, :] = m_up[-1, :] #Predicted goal
     
     # Store full state vector for goal model
     full_state_goal.append(m_up.copy())
     all_F_goal.append(F_goal.copy())
 
-plt.plot(groundtruth[:,0], groundtruth[:,1], label='Truth')
-plt.scatter(*zip(*noisy_data), alpha=0.3, label='Noisy obs')
-#plt.plot(noisy_data[:,0], noisy_data[:,1], 'o', label='Noisy obs', alpha=0.3)
-plt.plot(X[:,0], X[:,1], label='Estimate Goal Model', color='green')
-plt.plot(G[:,0], G[:,1], label='Inferred goal', color='darkred')
-plt.plot(XN[:,0], XN[:,1], '--', label='iSE Estimate Goal Model', color='limegreen')
-#plt.plot(GN[:,0], GN[:,1], '--', label='iSE Goal?', color='firebrick')
-plt.legend()
-plt.show()
+save_tracking_plot(groundtruth, noisy_data, X, G, XN, "plot_0.1betaTopRight_HwithoutGoal.png")
 
 print(f"RMSE of iSE model:  {get_model_rmse(XN, groundtruth):.4f}")
 print(f"RMSE of goal model:  {get_model_rmse(X, groundtruth):.4f}")

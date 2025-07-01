@@ -6,14 +6,14 @@ np.random.seed(0)
 
 # Parameters
 T = 100  # Number of time steps
-mu_goal = np.array([5.0, 5.0])      # Mean of goal
+mu_goal = np.array([10.0, 10.0])      # Mean of goal
 cov_goal = np.eye(2)               # Covariance of goal
 
 # Sample final goal from Gaussian
 goal = np.random.multivariate_normal(mu_goal, cov_goal)
 
 # Create linearly spaced trajectory from origin to goal
-trajectory = np.linspace(start=np.array([0.0, 0.0]), stop=goal, num=T)
+trajectory = np.linspace(start=np.array([3.0, 4.0]), stop=goal, num=T)
 
 # Plot the trajectory
 plt.plot(trajectory[:, 0], trajectory[:, 1], label='Ground truth')
