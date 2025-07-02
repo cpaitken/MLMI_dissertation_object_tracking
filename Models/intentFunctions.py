@@ -87,7 +87,8 @@ def g_se_pred(t,m,v,s2,l,sigma_p=0.0):
 
     #Compute Fk
     d = m.shape[0] - 1
-    ftw = solve(C[1:,1:],C[1:,0])
+    ftw = solve(C[1:,1:],C[1:,0]) ## This is the part I am unsure about -- but the SE function doesnt include the state anyway
+    #ftw = solve(C[1:-1,1:-1],C[1:-1,0:-1]) ## This is changed to exclude goal state for the initial thing
     F = np.eye(d,k=-1)
     F[0,:-1] = ftw
 
@@ -99,6 +100,12 @@ def g_se_pred(t,m,v,s2,l,sigma_p=0.0):
     ptw = C[0,0] - (C[0,1:] * ftw).sum()
     P = np.zeros([d,d])
     P[0,0] = ptw
+
+    ##Experiment to see if positions lead to goal
+    # beta = 0.7
+    # for i in range(1):
+    #     F_goal[i,-1] = beta
+    ##End of experimental section
 
     #Extend Pk to P_goal
     P_goal = np.zeros((d+1, d+1))
