@@ -2,23 +2,29 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Models.functions as f
 import Models.intentFunctions as iF
-from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot
+from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot, save_variance_array_txt
 from tqdm import tqdm
 
-groundtruth = np.load('ground_truth_trajectory.npy') #This is fake for the moment, obviously
-#groundtruth = make_groundtruth("Data/groundtruth.txt")
-#groundtruth = groundtruth[::20]
 
+groundtruth_filename = "Data/Generated/SE_track.txt"
+debugging_folder = "Debugging/iSE/Generated/goal_iSE_track"
+UZH = False
+#groundtruth = groundtruth[::20]
+groundtruth = make_groundtruth(groundtruth_filename, UZH=UZH)
+if UZH:
+    groundtruth = groundtruth[::20]
 
 ## Hyperparameter specification ##
 d = 5 #Sliding window
-s2 = 1.0 #Prior output variance
+s2 = 100 #Prior output variance
 ls = 3 #Length scale
 T = groundtruth.shape[0]
 Tmax = T #Maximum steps
 dt = 1
 t = dt * np.arange(d, 0, -1) #Time vector with most recent measurement first
 assoc_threshold = 5
+
+
 
 ##Adding noise to create simulated sensor measurements if only groundtruth data available
 sy = 0.5
@@ -34,8 +40,8 @@ mkN = [groundtruth[0, :] * np.ones([d, 2])]
 mkN[0][:-1] -= mkN[0][-1]  # iSE-1 style offset
 
 vkN = [np.eye(d)]
-vkN[0][:-1, :-1] = f.iSE(t[1:], t[1:], 0.1, 1.0)
-vkN[0][-1, -1] = 0.1
+vkN[0][:-1, :-1] = f.iSE(t[1:], t[1:], s2/10, ls)
+vkN[0][-1, -1] = s2/10
 #print("Shape of mkN:", mkN[0].shape)
 #else:
     ## Storage Variables ##
@@ -45,44 +51,34 @@ mk[0] = np.vstack((mk[0], G_prior))
 
 #TAKE ANOTHER LOOK AT THIS - COULD BE WRONG INITIALIZATION
 vk = [np.eye(d+1)]
-vk[0][:-2, :-2] = f.iSE(t[1:], t[1:], 0.1, 1.0)
-vk[0][-2, -2] = 0.1
+vk[0][:-2, :-2] = f.iSE(t[1:], t[1:], s2/10, ls)
+vk[0][-2, -2] = s2/10
 vk[0][-1,-1] = G_var
 
 #Storage for full debugging vectors
-full_state_iSE = []
-full_state_goal = []
-all_F_aug = []
-all_F_goal = []
-all_m_predN = []
-all_m_pred = []
-all_m_updN = []
-all_m_upd = []
-#Update and covariance debugging
-all_vpredN = []
-all_v_updN = []
-all_KGN = []
-all_y_inN = []
+normal_F_aug = []
+goal_F_aug = []
 
-all_vpred = []
-all_v_upd = []
-all_KG = []
-all_y_in = []
+normal_predicted_means = []
+goal_predicted_means = []
+normal_updated_means = []
+goal_updated_means = []
 
 
 
-XN = np.zeros([Tmax,2]) #Keep track of predicted state
-#GN = np.zeros([Tmax, 2]) #Keep track of predicted goal
+X_normal = np.zeros([Tmax,2]) #Keep track of predicted state
+S_normal = np.zeros([Tmax])
 #Infered Goal Model Storage
-X = np.zeros([Tmax,2]) #Keep track of predicted state
-G = np.zeros([Tmax, 2]) #Keep track of predicted goal
+X_goal = np.zeros([Tmax,2]) #Keep track of predicted state
+S_goal = np.zeros([Tmax])
+G_goal = np.zeros([Tmax, 2]) #Keep track of predicted goal
+S_goal_var = np.zeros([Tmax])
 
 #Inference Portion
 #if non_goalModel:
 for k in range(Tmax):
-    m_predN, v_predN, F_aug = f.ise1_pred(t + dt * (k + 1), mkN[-1], vkN[-1], 0.1, 1.0)
-    all_m_predN.append(m_predN.copy())
-    all_vpredN.append(v_predN.copy())
+    m_predN, v_predN, F_aug = f.ise1_pred(t, mkN[-1], vkN[-1], 0.1, 1.0)
+    
 
     # One observation only
     y = noisy_data[k]
@@ -92,74 +88,54 @@ for k in range(Tmax):
 
     # Update
     m_upN, v_upN, KG, y_in = f.update_ise1(datum, m_predN, v_predN, sy)
-    all_m_updN.append(m_upN.copy())
-    all_v_updN.append(v_upN.copy())
-    all_KGN.append(KG.copy())
-    all_y_inN.append(y_in.copy())
-
 
     # Record
     mkN.append(m_upN)
     vkN.append(v_upN)
-    XN[k, :] = m_upN[0, :] + m_upN[-1, :]  # Estimate + inferred goal component
-    #GN[k, :] = m_upN[-1, :]               # Just the inferred goal
+
+    X_normal[k, :] = m_upN[0, :] + m_upN[-1, :]  # Estimate + inferred goal component
+    S_normal[k] = v_upN[0,0] + v_upN[-1,-1]
     
     # Store full state vector for iSE model
-    full_state_iSE.append(m_upN.copy())
-    all_F_aug.append(F_aug.copy())
+    normal_F_aug.append(F_aug.copy())
+    normal_predicted_means.append(m_predN.copy())
+    normal_updated_means.append(m_upN.copy())
 #else:
 for k in range(Tmax):
-    tk = t + k
-
     #Predict using the augmented state space model
-    m_pred, v_pred, F_goal = iF.gise1_pred(t + dt * (k+1), mk[-1], vk[-1], 0.1, 1.0)
-    all_m_pred.append(m_pred.copy())
-    all_vpred.append(v_pred.copy())
+    m_pred, v_pred, F_goal = iF.gise1_pred(t, mk[-1], vk[-1], 0.1, 1.0)
 
     #Observation
     y = noisy_data[k]
-
     datum = y
 
     #Update with Kalman Filter
     m_up, v_up, KG, y_in = iF.augmented_update(datum, m_pred, v_pred, sy)
-    all_m_upd.append(m_up.copy())
-    all_v_upd.append(v_up.copy())
-    all_KG.append(KG.copy())
-    all_y_in.append(y_in.copy())
-
-
 
     mk.append(m_up)
     vk.append(v_up)
-    X[k, :] = m_up[0, :] + m_up[-2, :] #Predicted most recent location
-    #X[k, :] = m_up[0, :] + +m_up[-2, :] + m_up[-1, :] #Predicted most recent location and goal
-    G[k, :] = m_up[-1, :] #Predicted goal
+    X_goal[k, :] = m_up[0, :] + m_up[-2, :] + m_up[-1, :] #Predicted most recent location
+    S_goal[k] = v_up[0,0] + v_up[-2,-2] + v_up[-1,-1]
+    S_goal_var[k] = v_up[-1,-1]#X[k, :] = m_up[0, :] + +m_up[-2, :] + m_up[-1, :] #Predicted most recent location and goal
+    G_goal[k, :] = m_up[-1, :] #Predicted goal
     
     # Store full state vector for goal model
-    full_state_goal.append(m_up.copy())
-    all_F_goal.append(F_goal.copy())
+    goal_F_aug.append(F_goal.copy())
+    goal_predicted_means.append(m_pred.copy())
+    goal_updated_means.append(m_up.copy())
 
-save_tracking_plot(groundtruth, noisy_data, X, G, XN, "plot_0.1betaTopRight_HwithoutGoal.png")
+save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, X_normal, "Goal-iSE", "iSE", "ComparisonPlot.png", debugging_folder)
+save_matrix_arrays_txt(normal_F_aug[:5], goal_F_aug[:5], "transitionMatrices.txt", "F_aug", "F_goal", debugging_folder)
+save_vector_arrays_txt(normal_predicted_means, goal_predicted_means, "predictedMeans.txt", "m_predN", "m_pred", debugging_folder)
+save_vector_arrays_txt(normal_updated_means, goal_updated_means, "updatedMeans.txt", "m_updN", "m_upd", debugging_folder)
+save_variance_array_txt(S_goal_var, "goalVariances.txt", debugging_folder)
+save_variance_array_txt(S_normal, "normalLocationVariances.txt", debugging_folder)
+save_variance_array_txt(S_goal, "goalLocationVariances.txt", debugging_folder)
 
-print(f"RMSE of iSE model:  {get_model_rmse(XN, groundtruth):.4f}")
-print(f"RMSE of goal model:  {get_model_rmse(X, groundtruth):.4f}")
-
-
-## Save detailed state information
-# Convert lists to arrays for easier handling
-full_state_iSE = np.array(full_state_iSE)  # Shape: (Tmax, d, 2)
-full_state_goal = np.array(full_state_goal)  # Shape: (Tmax, d+1, 2)
-
-# Save detailed state comparison
-save_state_comparison_txt(full_state_iSE, full_state_goal, "detailed_state_comparison.txt")
-save_matrix_arrays_txt(all_F_aug[:5], all_F_goal[:5], "transition_matrix_examples.txt", "F_aug", "F_goal")
-save_vector_arrays_txt(all_m_predN, all_m_pred, "predicted_means.txt", "m_predN", "m_pred")
-save_vector_arrays_txt(all_m_updN, all_m_upd, "updated_means.txt", "m_updN", "m_upd")
-save_matrix_arrays_txt(all_vpredN[:5], all_vpred[:5], "prediction_noise_matrix_examples.txt", "V_predN", "VPred")
-save_matrix_arrays_txt(all_v_updN[:5], all_v_upd[:5], "update_prediction_noise_matrix_examples.txt", "V_updN", "VUpdate")
-save_vector_arrays_txt(all_KGN, all_KG, "kalman_gains.txt", "KGN", "KG")
-save_vector_arrays_txt(all_y_inN, all_y_in, "innovations.txt", "y_inN", "y_in")
+se_rmse = get_model_rmse(X_normal, groundtruth)
+gse_rmse = get_model_rmse(X_goal, groundtruth)
+print(f"RMSE of SE model:  {get_model_rmse(X_normal, groundtruth):.4f}")
+print(f"RMSE of goal model:  {get_model_rmse(X_goal, groundtruth):.4f}")
 
 print("Saved debugging vectors and matrices to folder Debugging")
 

@@ -1,3 +1,9 @@
+## CITATION ##
+# This code is directly from the following paper:
+#"Integrated Gaussian Processes for Tracking" by Fred Lydeard, Bashar Ahmad, and Simon Godsill
+#Github: https://github.com/afredgcam/iGPs
+
+
 # iSE-1 vs iSE-2 vs SE: double swap
 
 import numpy as np

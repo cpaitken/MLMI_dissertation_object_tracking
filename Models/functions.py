@@ -1,5 +1,10 @@
-# functions
+## CITATION ##
+# This code is directly from the following paper:
+#"Integrated Gaussian Processes for Tracking" by Fred Lydeard, Bashar Ahmad, and Simon Godsill
+#Github: https://github.com/afredgcam/iGPs
 
+
+# functions
 import numpy as np
 from scipy.stats import norm
 from scipy.linalg import solve, cholesky

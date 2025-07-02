@@ -177,6 +177,37 @@ def gen_goal_driven_track(Tmax,d,s2,l, goal, sigma_p=0.0, dim=2, dt=1, first_is_
     x = x+goal
     return x
 
+## Generating Goal Driven Track ##
+def gen_iSE_driven_track(Tmax,d,s2,l, goal, sigma_p=0.0, dim=2, dt=1, first_is_last=False):
+    #Created similarly to gen_SE_track but with adding the goal state to match the measurement model
+    x = np.zeros([Tmax,dim])
+
+    #Prior variance
+    t = dt * np.arange(d,0,-1)
+    C = iSE(t,t,s2,l)
+
+    #Sample over initial window - SAME
+    sqrt_C = cholesky(C)
+    x[-d:,:] = sqrt_C.T @ norm.rvs(size=[d,dim])
+
+    #Common quantities - DIFFERENT
+    ftw = solve(C[1:,1:],C[1:,0])
+    ptw = C[0,0] - (C[0,1:] * ftw).sum()
+
+    for k in range(d, Tmax):
+        # prepare next sample
+        x_star = x[d-k-1,:]
+        mean = x_star + ftw.T @ (x[-k:d-k-1,:] - x_star)
+        
+        # sample next step
+        x[-k-1,:] = norm.rvs(mean,ptw**0.5)
+
+    if not first_is_last:
+        x = x[::-1,:]
+    
+    x = x+goal
+    return x
+
 ## NOT WRITTEN BY ME, JUST TO CHECK ##
 def gen_gp_traj_with_goal_mean(Tmax, d,s2, l, goal, dt=1):
     t = dt * np.arange(Tmax)
