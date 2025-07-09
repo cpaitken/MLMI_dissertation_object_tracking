@@ -118,7 +118,7 @@ def ise1_pred(t,m,v,s2,l):
     m_pred = F_aug @ m
     v_pred = F_aug @ v @ F_aug.T + P
     
-    return m_pred,v_pred,F_aug
+    return m_pred,v_pred,F_aug, P
 
 #####################
 # Extended Goal State

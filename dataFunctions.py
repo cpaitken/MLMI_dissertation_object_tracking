@@ -265,3 +265,23 @@ def print_rmse_summary(baseline_folder):
             print(f"  GSE % improvement over SE: mean={np.mean(improvements):.2f}%, std={np.std(improvements):.2f}%\n")
         else:
             print(f"Category: {category} (no valid results found)")
+
+def save_particles_txt(particles, filename, folder="Debugging"):
+    """
+    Save all particles at each timestep to a txt file in a readable format.
+    
+    Parameters:
+        particles: np.ndarray of shape (num_timesteps, num_particles, state_dim) or (num_timesteps, num_particles, d, 2)
+        filename: str, name of the file to save
+        folder: str, folder to save the file in (default: 'Debugging')
+    """
+    import os
+    os.makedirs(folder, exist_ok=True)
+    path = os.path.join(folder, filename)
+    with open(path, 'w') as f:
+        for t, timestep_particles in enumerate(particles):
+            f.write(f"Time Step {t}:\n")
+            f.write("-" * 20 + "\n")
+            for i, particle in enumerate(timestep_particles):
+                f.write(f"  Particle {i}: {np.array2string(particle, precision=4, separator=', ')}\n")
+            f.write("\n" + "="*50 + "\n\n")
