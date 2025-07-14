@@ -120,43 +120,6 @@ def ise1_pred(t,m,v,s2,l):
     
     return m_pred,v_pred,F_aug, P
 
-#####################
-# Extended Goal State
-#####################
-
-def gise1_pred(t,m,v,s2,l,sigma_p=0.0):
-    #get prior covariance
-    C = iSE(t,t,s2,l)
-
-     # compute Fk
-    d = m.shape[0] - 1 #To account for the goal dimension in the state
-    ftw = solve(C[1:,1:],C[1:,0])
-    F = np.eye(d-1,k=-1)
-    F[0,:] = ftw
-    F_aug = np.eye(d)
-    F_aug[:-1,:-1] = F
-    
-    # compute Pk
-    ptw = C[0,0] - (C[0,1:] * ftw).sum()
-    P = np.zeros([d,d])
-    P[0,0] = ptw
-
-    #Create extended transition matrix F_goal and extended P_k
-    F_goal = np.eye(d+1)
-    F_goal[:d, :d] = F_aug
-
-    P_goal = np.zeros((d+1, d+1))
-    P_goal[:d, :d] = P
-    P_goal[d,d] = sigma_p
-
-    #Compute predicted mean and covariance
-    m_pred = F_goal @ m
-    v_pred = F_goal @ v @ F_goal.T + P_goal  
-
-    return m_pred, v_pred
-
-
-
 def ise2_pred(t,m,v,s2,l):
     
     # get full prior covariance
@@ -200,7 +163,7 @@ def se_pred(t,m,v,s2,l):
     m_pred = F @ m
     v_pred = F @ v @ F.T + P
     
-    return m_pred,v_pred, F
+    return m_pred,v_pred, F, P
 
 #####################
 #####################

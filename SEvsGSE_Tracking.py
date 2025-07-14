@@ -2,18 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Models.functions as f
 import Models.intentFunctions as iF
-from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot, extract_params_from_header, save_specifications_txt
+from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot, extract_params_from_header, save_specifications_txt, save_variance_array_txt
 from tqdm import tqdm
 
 #groundtruth = np.load('ground_truth_trajectory.npy') #This is fake for the moment, obviously
 ## THINGS TO ACTUALLY CHANGE ##
 groundtruth_filename = "Data/UZH/Medium/UZH_5.txt" ##CHANGE THIS FOR DATA
-debugging_folder = "Debugging/UZH/Medium/UZH_5"
+debugging_folder = "Debugging/Generated/SE_DebuggingForLambdaModel_withUZHData"
 UZH=True
 #Model Notes
-notes = "Set goal prior to be last point in groundtruth"
+notes = "Set goal prior to be 0.0"
 
-G_prior = np.array([7.0, -3.0])
+G_prior = np.array([0.0, 0.0])
 G_var = 10000  #Unsure goal initially
 initialize_with_truth = True
 
@@ -84,6 +84,8 @@ S_goal_var = np.zeros([Tmax])
 #Debugging objects
 normal_F_aug = []
 goal_F_aug = []
+normal_P = []
+goal_P = []
 
 normal_predicted_means = []
 goal_predicted_means = []
@@ -94,7 +96,7 @@ goal_updated_means = []
 ##Normal GP (SE) model
 for k in range(Tmax):
     #Prediction step
-    m_predN, v_predN, F_augN = f.se_pred(t,mk_normal[-1],vk_normal[-1],s2,ls)
+    m_predN, v_predN, F_augN, P_normal= f.se_pred(t,mk_normal[-1],vk_normal[-1],s2,ls)
 
     #Skip association step for now
     y = noisy_data[k]
@@ -112,11 +114,12 @@ for k in range(Tmax):
     S_normal[k] = v_upN[0,0]
 
     normal_F_aug.append(F_augN.copy())
+    normal_P.append(P_normal.copy())
     normal_predicted_means.append(m_predN.copy())
     normal_updated_means.append(m_upN.copy())
 #Extended Goal Model
 for k in range(Tmax):
-    m_pred, v_pred, F_goal = iF.g_se_pred(t,mk_goal[-1],vk_goal[-1],s2,ls)
+    m_pred, v_pred, F_goal, P_goal = iF.g_se_pred(t,mk_goal[-1],vk_goal[-1],s2,ls)
 
     y = noisy_data[k]
     datum = y
@@ -135,12 +138,14 @@ for k in range(Tmax):
     G_goal[k,:] = m_up[-1,:]
 
     goal_F_aug.append(F_goal.copy())
+    goal_P.append(P_goal.copy())
     goal_predicted_means.append(m_pred.copy())
     goal_updated_means.append(m_up.copy())
 
 #Save results for debugging
 save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, X_normal, "Goal-SE", "SE", "ComparisonPlot.png", debugging_folder)
 save_matrix_arrays_txt(normal_F_aug[:5], goal_F_aug[:5], "transitionMatrices.txt", "F_aug", "F_goal", debugging_folder)
+save_matrix_arrays_txt(normal_P[:5], goal_P[:5], "covarianceMatrices.txt", "P_normal", "P_goal", debugging_folder)
 save_vector_arrays_txt(normal_predicted_means, goal_predicted_means, "predictedMeans.txt", "m_predN", "m_pred", debugging_folder)
 save_vector_arrays_txt(normal_updated_means, goal_updated_means, "updatedMeans.txt", "m_updN", "m_upd", debugging_folder)
 save_variance_array_txt(S_goal_var, "goalVariances.txt", debugging_folder)
@@ -150,8 +155,8 @@ save_variance_array_txt(S_goal, "goalLocationVariances.txt", debugging_folder)
 se_rmse = get_model_rmse(X_normal, groundtruth)
 gse_rmse = get_model_rmse(X_goal, groundtruth)
 performance_params = {
-    "SE_RMSE": se_rmse,
-    "GSE_RMSE": gse_rmse
+    "SE_RMSE": float(se_rmse),
+    "GSE_RMSE": float(gse_rmse)
 }
 
 all_params = {

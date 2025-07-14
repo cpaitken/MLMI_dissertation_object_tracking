@@ -6,6 +6,7 @@ from matplotlib.patches import Circle,PathPatch
 from matplotlib.path import Path
 from copy import deepcopy as dc
 from Models.functions import iSE, SE
+from scipy.stats import multivariate_normal
 
 #####################
 # Extended Goal State
@@ -19,34 +20,30 @@ def gise1_pred(t,m,v,s2,l,sigma_g=0.0):
     d = m.shape[0] - 1 #To account for the goal dimension in the state
     ftw = solve(C[1:,1:],C[1:,0])
     F = np.eye(d-1,k=-1)
+
+    #To account for iSE difference
     F[0,:] = ftw
     F_aug = np.eye(d)
     F_aug[:-1,:-1] = F
-    
+
+    #To account for extra goal dimension
+    F_goal = np.eye(d+1)
+    F_goal[:-1, :-1] = F_aug
+
     # compute Pk
     ptw = C[0,0] - (C[0,1:] * ftw).sum()
     P = np.zeros([d,d])
     P[0,0] = ptw
 
-    #Create extended transition matrix F_goal and extended P_k
-    F_goal = np.eye(d+1)
-    F_goal[:d, :d] = F_aug
-
-    ##Experiment to see if positions lead to goal
-    # beta = 0.1
-    # for i in range(1):
-    #     F_goal[i,-1] = beta
-    ##End of experimental section
-
     P_goal = np.zeros((d+1, d+1))
-    P_goal[:d, :d] = P
-    P_goal[d,d] = sigma_g
+    P_goal[:-1, :-1] = P
+    P_goal[-1,-1] = sigma_g
 
     #Compute predicted mean and covariance
     m_pred = F_goal @ m
     v_pred = F_goal @ v @ F_goal.T + P_goal  
 
-    return m_pred, v_pred, F_goal
+    return m_pred, v_pred, F_goal, P_goal
 
 def augmented_update(y, m, v, sy):
     #Mapping matrix H for the observation model that includes the latent goal
@@ -56,6 +53,7 @@ def augmented_update(y, m, v, sy):
     #H[0, -1] = 1 #Include latent goal
     #End of experimental section
     H[0, -2] = 1 #Include the initial position (as is done in the iSE-1 model)
+    H[0, -1] = 1 #Include the goal
 
 
     #Calculate Kalman Gain
@@ -116,7 +114,7 @@ def g_se_pred(t,m,v,s2,l,sigma_p=0.0):
     m_pred = F_goal @ m
     v_pred = F_goal @ v @ F_goal.T + P_goal
 
-    return m_pred, v_pred, F_goal
+    return m_pred, v_pred, F_goal, P_goal
 
 def g_update(y, m, v, sy):
     #Attempting to make this in the same style as original update function
@@ -132,8 +130,6 @@ def g_update(y, m, v, sy):
     H = np.zeros((1, m.shape[0]))
     H[0,0] = 1 #Include most recent position
     H[0, -1] = 1 #Include latent goal
- 
-
 
     #Calculate Kalman Gain
     Hv = H @ v
@@ -259,8 +255,10 @@ def fixed_lambda_kf_update(y, m, v, sy, t, lambda_val):
 
     return m_up, v_up, KG
 
+#####################
 ## Generating Goal Driven Track ##
-def gen_goal_driven_track(Tmax,d,s2,l, goal, sigma_p=0.0, dim=2, dt=1, first_is_last=False):
+#####################
+def gen_goal_driven_track(Tmax,d,s2,l, goal, sigma_g=0.0, dim=2, dt=1, first_is_last=False):
     #Created similarly to gen_SE_track but with adding the goal state to match the measurement model
     x = np.zeros([Tmax,dim])
 
@@ -317,20 +315,6 @@ def gen_iSE_driven_track(Tmax,d,s2,l, goal, sigma_p=0.0, dim=2, dt=1, first_is_l
     
     x = x+goal
     return x
-
-## NOT WRITTEN BY ME, JUST TO CHECK ##
-def gen_gp_traj_with_goal_mean(Tmax, d,s2, l, goal, dt=1):
-    t = dt * np.arange(Tmax)
-    traj = np.zeros((Tmax, 2))
-    for dim in range(2):
-        # Build SE covariance
-        C = SE(t,t,s2,l)
-        # Sample from zero-mean GP
-        sqrt_C = cholesky(C)
-        gp_sample = sqrt_C @ norm.rvs(size=Tmax)
-        # Add the goal mean
-        traj[:, dim] = gp_sample + goal[dim]
-    return traj
 
 def gen_gp_bridge(Tmax, s2, l, goal, dt=1, start=None):
     t = dt * np.arange(Tmax)

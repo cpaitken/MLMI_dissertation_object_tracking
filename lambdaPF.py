@@ -139,6 +139,7 @@ for k in range(Tmax):
 
         #Noisy Observation
         cur_lambda = lambda_particles[i]
+        print("Cur lambda is", cur_lambda)
         updated_state_mean, updated_state_cov, _ = iF.fixed_lambda_kf_update(y, state_mean, state_cov, sy, k, cur_lambda)
 
         state_particles[i] = updated_state_mean

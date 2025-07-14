@@ -23,23 +23,27 @@ ls = 3 #Length scale
 T = groundtruth.shape[0]
 Tmax = T #Maximum steps
 dt = 1
+sy = 0.5 #Measurement noise
 t = dt * np.arange(d, 0, -1) #Time vector with most recent measurement first
 assoc_threshold = 5
 num_particles = 500
 warmup_steps = 10
 
 
-
-##Adding noise to create simulated sensor measurements if only groundtruth data available
-sy = 1.0
-noisy_data = [groundtruth[k] + np.random.normal(0, sy, 2) for k in range(Tmax)]
-
-
-## Goal Creation and Convergence State##
+## Goal Creation and Convergence State## ##Aspects of process noise##
 G_prior = np.array([[0.0, 0.0]])
 G_var = 10  #Unsure goal initially
 Lamda_prior = np.array([[0.0, 0.0]])
 Lambda_var = 10 #Unsure convergence rate initially
+
+
+
+##Adding noise to create simulated sensor measurements if only groundtruth data available
+noisy_data = [groundtruth[k] + np.random.normal(0, sy, 2) for k in range(Tmax)]
+
+
+
+
 
 #if non_goalModel:
 mkN = [groundtruth[0, :] * np.ones([d, 2])]
@@ -119,12 +123,17 @@ for k in range(Tmax):
     normal_updated_means.append(m_upN.copy())
 #else:
 #Particle Filtering Portion and Initialization
-particles = seq.sample_particles(mk[-1], vk[-1], num_particles)
-particle_covariances = np.array([vk[-1] for _ in range(num_particles)])
-weights = np.ones(num_particles) / num_particles
+# particles = seq.sample_particles(mk[-1], vk[-1], num_particles)
+# particle_covariances = np.array([vk[-1] for _ in range(num_particles)])
+# weights = np.ones(num_particles) / num_particles
 
 #print("Initialized particles:", particles)
 for k in range(Tmax):
+    ##EXPERIMENTAL SECTION##
+    particles = seq.sample_particles(mk[-1], vk[-1], num_particles)
+    particle_covariances = np.array([vk[-1] for _ in range(num_particles)])
+    weights = np.ones(num_particles) / num_particles
+    ##END EXPERIMENTAL SECTION##
     #Predict using the goal convering iSE model and particle filtering
     new_particles, new_part_cov, all_F_conv, all_P_conv = seq.propagate_particles(particles, particle_covariances, t, s2, ls, G_var, Lambda_var)
     
@@ -145,8 +154,16 @@ for k in range(Tmax):
 
     #Estimate state at this time step
     state_estimate = np.average(particles, axis=0, weights=weights)
+    ##EXP SECTION - AVERAGING COVARIANCES##
+    state_covariance = np.average(particle_covariances, axis=0, weights=weights)
     
     current_predicted_y = iF.conv_ise_measure(state_estimate, sy, k)
+
+    ##Experimentatl section -- Going to try to keep a list of all the estimated state and covariance and resample particles at each time step ##
+    mk.append(state_estimate)
+    vk.append(state_covariance)
+    ## End Experimental section ##
+
     X_goal[k, :] = current_predicted_y
     G_goal[k, :] = state_estimate[-2, :]
 

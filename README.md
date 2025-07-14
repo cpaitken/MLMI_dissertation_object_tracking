@@ -11,4 +11,4 @@ To activate each time:
 source .venv/bin/activate
 
 Dependencies:
-Numpy, Matplotlib, tqdm, scipy
+Numpy, Matplotlib, tqdm, scipy, seaborn

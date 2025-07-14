@@ -11,7 +11,7 @@ np.random.seed(24)
 def track_SE(Tmax, s2, ls, sy, mk_normal, vk_normal, noisy_data, X_normal, S_normal, normal_F_aug, normal_predicted_means, normal_updated_means):
     for k in range(Tmax):
         #Prediction step
-        m_predN, v_predN, F_augN = f.se_pred(t,mk_normal[-1],vk_normal[-1],s2,ls)
+        m_predN, v_predN, F_augN, _ = f.se_pred(t,mk_normal[-1],vk_normal[-1],s2,ls)
 
         #Skip association step for now
         y = noisy_data[k]
@@ -33,9 +33,9 @@ def track_SE(Tmax, s2, ls, sy, mk_normal, vk_normal, noisy_data, X_normal, S_nor
 
     return X_normal, S_normal, normal_F_aug, normal_predicted_means, normal_updated_means
 
-def track_GSE(Tmax, s2, ls, sy, mk_goal, vk_goal, noisy_data, X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means):
+def track_GSE(Tmax, s2, ls, sy, mk_goal, vk_goal, noisy_data, X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means, sigma_g):
     for k in range(Tmax):
-        m_pred, v_pred, F_goal = iF.g_se_pred(t,mk_goal[-1],vk_goal[-1],s2,ls)
+        m_pred, v_pred, F_goal, _ = iF.g_se_pred(t,mk_goal[-1],vk_goal[-1],s2,ls, sigma_g)
 
         y = noisy_data[k]
         datum = y
@@ -70,19 +70,35 @@ All_categories = [Easy, Medium, Hard]
 category_names = ["Easy", "Medium", "Hard"]
 
 #Define the common parameters for both models
-s2 = 100
-ls = 20
+s2_options = [10, 50, 100, 500, 1000, 5000, 10000]
+s2_names = ["S2:10", "S2:50", "S2:100", "S2:500", "S2:1000", "S2:5000", "S2:10000"]
+ls_options = [3, 5, 7, 10, 15, 20, 30]
+ls_names = ["LS:3", "LS:5", "LS:7", "LS:10", "LS:15", "LS:20", "LS:30"]
+G_var_options = [10, 100, 1000, 10000]
+G_var_names = ["G_var:100", "G_var:1000", "G_var:10000"]
+G_prior_options = ["Init 0", "Init 500", "Init Truth"]
+
+s2 = 1000
+ls = 30
 d = 5
 dt = 1
 sy = 1
+sigma_g = 0.05
 G_var = 10000
 initializeTrack_with_truth = True
-initializeGoal_with_truth = False
+initializeGoal_with_truth = True
 UZH = True
-run_name = "Goal_False_Init"
+show_Target = True
+run_name = "Sigma_G_0.05"
 
-
-#Call tracking for SE model on all files
+##EXPERIMENT 1: VARYING S2 and LS for G_Prior = Truth, G_var = 10000 ##
+# for s2, s2_name in zip(s2_options, s2_names):
+#     for ls, ls_name in zip(ls_options, ls_names):
+#         ##Common Parameters for all the s2 and ls runs ##
+#         run_name = f"S2:{s2}_LS:{ls}_G_var:10000_G_prior:Truth"
+#         initializeGoal_with_truth = True
+#         initializeTrack_with_truth = True
+#         G_var = 10000
 for category, category_name in zip(All_categories, category_names):
     for file in category: #For each UZH file
         #Make the groundtruth
@@ -104,7 +120,7 @@ for category, category_name in zip(All_categories, category_names):
         if initializeGoal_with_truth:
             G_prior = groundtruth[-1,:]
         else:
-            G_prior = np.array([50,50])
+            G_prior = np.array([500,500])
 
         #Common parameters dependent on the file
         Tmax = groundtruth.shape[0]
@@ -155,9 +171,9 @@ for category, category_name in zip(All_categories, category_names):
 
         #Call tracking for SE and return all the results
         X_normal, S_normal, normal_F_aug, normal_predicted_means, normal_updated_means = track_SE(Tmax, s2, ls, sy, mk_normal, vk_normal, noisy_data, X_normal, S_normal, normal_F_aug, normal_predicted_means, normal_updated_means)
-        X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means = track_GSE(Tmax, s2, ls, sy, mk_goal, vk_goal, noisy_data, X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means)
+        X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means = track_GSE(Tmax, s2, ls, sy, mk_goal, vk_goal, noisy_data, X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means, sigma_g)
 
-        save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, X_normal, "Goal-SE", "SE", "ComparisonPlot.png", debugging_folder)
+        save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, X_normal, "Goal-SE", "SE", "ComparisonPlot.png", debugging_folder, show_Target)
         save_matrix_arrays_txt(normal_F_aug[:5], goal_F_aug[:5], "transitionMatrices.txt", "F_aug", "F_goal", debugging_folder)
         save_vector_arrays_txt(normal_predicted_means, goal_predicted_means, "predictedMeans.txt", "m_predN", "m_pred", debugging_folder)
         save_vector_arrays_txt(normal_updated_means, goal_updated_means, "updatedMeans.txt", "m_updN", "m_upd", debugging_folder)
@@ -168,8 +184,8 @@ for category, category_name in zip(All_categories, category_names):
         se_rmse = get_model_rmse(X_normal, groundtruth)
         gse_rmse = get_model_rmse(X_goal, groundtruth)
         performance_params = {
-            "SE_RMSE": se_rmse,
-            "GSE_RMSE": gse_rmse
+            "SE_RMSE": float(se_rmse),
+            "GSE_RMSE": float(gse_rmse)
         }
 
         all_params = {
