@@ -52,22 +52,49 @@ for i, goal in enumerate(goal_options_coords):
 
 # Load goal predictions and convert to indices
 all_goal_vectors = {}
+base_path = "Debugging/SE_MultTargets/Quad/Quad[ 20 -20]_8/SG:2.0/Gvar:10"
+
+# Check if the base path exists
+if not os.path.exists(base_path):
+    print(f"Warning: Base path {base_path} does not exist!")
+    print("Available paths in Debugging/SE_MultTargets/Quad/:")
+    if os.path.exists("Debugging/SE_MultTargets/Quad/"):
+        for item in os.listdir("Debugging/SE_MultTargets/Quad/"):
+            print(f"  {item}")
+    exit()
+
 for name_option, goal_coord in zip(name_options, goal_options_coords):
     goal_index = goal_to_index[tuple(goal_coord)]
-    all_goal_vectors[goal_index] = load_goal_predictions(f"Debugging/SE_MultTargets/-20_-20/SG:0.5/Gvar:1000/{name_option}")
+    file_path = f"{base_path}/{name_option}"
+    print(f"Loading file: {file_path}")
+    all_goal_vectors[goal_index] = load_goal_predictions(file_path)
+
+# Check if all files were loaded successfully
+missing_files = []
+for i in range(len(goal_options_coords)):
+    if all_goal_vectors[i] is None:
+        missing_files.append(name_options[i])
+
+if missing_files:
+    print(f"Error: Could not load the following files:")
+    for file in missing_files:
+        print(f"  {file}")
+    print("Please check that the files exist and the path is correct.")
+    exit()
 
 num_goal_options = 4
-num_time_steps = 100
+num_time_steps = min(len(all_goal_vectors[0]), 100)  # Use actual data length or 100, whichever is smaller
 
 for i in range(num_goal_options):
     # Reset the plot matrix to zeros for each goal
     plot_matrix = np.zeros([num_goal_options, num_time_steps])
     
     for k in range(num_time_steps):
-        goal_index = int(all_goal_vectors[i][k][0])
-        plot_matrix[goal_index, k] = 1
+        if k < len(all_goal_vectors[i]):  # Check bounds
+            goal_index = int(all_goal_vectors[i][k][0])
+            plot_matrix[goal_index, k] = 1
 
-    plt.figure(figsize=(20,3))
+    plt.figure(figsize=(17,2.5))
     plt.imshow(plot_matrix, cmap='Purples', aspect='auto', origin='lower')
 
     plt.xlabel("Time Step")
@@ -81,7 +108,7 @@ for i in range(num_goal_options):
     plt.ylim(-0.5, num_goal_options - 0.5) # Ensure full cells are visible
 
     # Add a title
-    plt.title(f"Predicted Goal Over Time: {goal_options[i]} Initialization")
+    #plt.title(f"Goal Initialization: {goal_options[i]}")
 
     # Add grid lines to clearly separate the cells
     # Vertical lines only at multiples of 5

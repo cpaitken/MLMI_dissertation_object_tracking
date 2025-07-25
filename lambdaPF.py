@@ -4,7 +4,7 @@ import Models.functions as f
 import Models.intentFunctions as iF
 import Models.seqInference as seq
 from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot, save_variance_array_txt, save_particles_txt, save_vector_array_txt
-from tqdm import tqdm
+
 
 
 #groundtruth_filename = "Data/Generated/SE_track.txt"

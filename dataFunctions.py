@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 14})
 import re
 import ast
 from scipy.interpolate import make_interp_spline
@@ -27,7 +28,9 @@ __all__ = [
     "print_rmse_statistics_by_parameters",
     "save_rmse_to_txt",
     "find_convergence_time",
-    "print_convergence_summary"
+    "print_convergence_summary",
+    "analyze_convergence_by_parameters",
+    "save_convergence_matrices_to_txt"
 ]
 
 def make_groundtruth(filename, UZH=False):
@@ -157,25 +160,26 @@ def color_line(x, y, cmap='cubehelix', linewidth=2, alpha=1.0, label=None):
     if label:
         plt.plot([], [], color=plt.get_cmap(cmap)(0.5), label=label)
 
-def save_tracking_plot(groundtruth, noisy_data, X, G, XN, modelName1, modelName2, filename, folder="Debugging", show_Target=False, false_goals=None):
+def save_tracking_plot(groundtruth, noisy_data, X, G, modelName1, filename, folder="Debugging", show_Target=False, true_goal=np.array([0,0]), false_goals=None, XN=None, modelName2=None):
     """
     Plot and save the tracking results to Debugging/Plots/filename (PNG).
     """
     os.makedirs(os.path.join(folder), exist_ok=True)
     plt.figure()
     gt_x_smooth, gt_y_smooth = smooth_line(groundtruth[:,0], groundtruth[:,1])
-    plt.plot(gt_x_smooth, gt_y_smooth, label='Truth')
+    plt.plot(gt_x_smooth, gt_y_smooth, label='Truth', linewidth=2)
     plt.scatter(*zip(*noisy_data), alpha=0.3, label='Noisy obs')
     X_x_smooth, X_y_smooth = smooth_line(X[:,0], X[:,1])
     plt.plot(X_x_smooth, X_y_smooth, label=modelName1, color='green')
     G_x_smooth, G_y_smooth = smooth_line(G[:,0], G[:,1])
     color_line(G_x_smooth, G_y_smooth, cmap='cividis', linewidth=2, alpha=1.0, label='Inferred goal')
-    XN_x_smooth, XN_y_smooth = smooth_line(XN[:,0], XN[:,1])
-    plt.plot(XN_x_smooth, XN_y_smooth, '--', label=modelName2, color='limegreen')
+    if XN is not None and modelName2 is not None:
+        XN_x_smooth, XN_y_smooth = smooth_line(XN[:,0], XN[:,1])
+        plt.plot(XN_x_smooth, XN_y_smooth, '--', label=modelName2, color='limegreen')
     
     # Draw a semi-transparent 5x5 square around the last groundtruth location
     if show_Target:
-        end_x, end_y = groundtruth[-1, 0], groundtruth[-1, 1]
+        end_x, end_y = true_goal[0], true_goal[1]
         square = patches.Rectangle((end_x - 2.5, end_y - 2.5), 5, 5, linewidth=0, edgecolor=None, facecolor='green', alpha=0.2, zorder=2)
         plt.gca().add_patch(square)
     
@@ -186,9 +190,24 @@ def save_tracking_plot(groundtruth, noisy_data, X, G, XN, modelName1, modelName2
             false_square = patches.Rectangle((false_x - 2.5, false_y - 2.5), 5, 5, linewidth=0, edgecolor=None, facecolor='red', alpha=0.2, zorder=2)
             plt.gca().add_patch(false_square)
     
-    plt.xlabel('x (m)')
-    plt.ylabel('y (m)')
-    plt.legend()
+    plt.xlabel('x (m)', fontweight='bold')
+    plt.ylabel('y (m)', fontweight='bold')
+    plt.legend(fontsize=12)
+    plt.savefig(os.path.join(folder, filename), bbox_inches='tight')
+    plt.close()
+
+def save_trajectory_plot(trajectory, filename, folder="Debugging", true_goal=None):
+    os.makedirs(os.path.join(folder), exist_ok=True)
+    plt.figure()
+    plt.plot(trajectory[:,0], trajectory[:,1])
+    plt.xlabel('x')
+    plt.ylabel('y')
+    
+    # Add green point for goal location if provided
+    if true_goal is not None:
+        plt.plot(true_goal[0], true_goal[1], 'go', markersize=10, label='Goal')
+        plt.legend()
+    
     plt.savefig(os.path.join(folder, filename), bbox_inches='tight')
     plt.close()
 
@@ -237,6 +256,16 @@ def save_state_array_txt(state_array, filename, label, folder="Debugging"):
             for i in range(state_array[k].shape[0]):
                 f.write(f"  Position {i}: [{state_array[k][i,0]:.3f}, {state_array[k][i,1]:.3f}]\n")
             f.write("\n" + "="*50 + "\n\n")
+
+def save_lambda_values_txt(lambda_values, filename, folder="Debugging"):
+    """
+    Save a lambda values array to a txt file in the specified folder with readable formatting.
+    """
+    os.makedirs(folder, exist_ok=True)
+    path = os.path.join(folder, filename)
+    with open(path, 'w') as f:
+        for i in range(len(lambda_values)):
+            f.write(f"Lambda value at time {i}: {lambda_values[i]}\n")
 
 def save_specifications_txt(folder, params, extra_info=None):
     """
@@ -713,3 +742,258 @@ def print_convergence_summary(base_folder, target_index, min_consecutive_steps=5
     if all_converged_times:
         print(f"Overall average convergence time: {np.mean(all_converged_times):.1f} steps")
         print(f"Overall convergence time range: {np.min(all_converged_times)} - {np.max(all_converged_times)} steps")
+
+def steps_to_convergence(predictions, target_index):
+    time_steps_passed = len(predictions)
+    for i, idx in enumerate(reversed(predictions)):
+        if idx == target_index:
+            time_steps_passed -= 1
+        else:
+            break
+    
+    # Calculate percentage of time spent in correct goal state
+    correct_predictions = sum(1 for idx in predictions if idx == target_index)
+    percentage_correct = (correct_predictions / len(predictions)) * 100 if len(predictions) > 0 else 0
+    
+    return time_steps_passed, percentage_correct
+
+def analyze_convergence_by_parameters(base_folder, map_goal_idx, sigma_options, gvar_options, num_goal_options, Tmax, separate_tracking=False):
+    # Store all values for each parameter combination to calculate mean and std
+    if separate_tracking:
+        convergence_data = {(sigma, gvar): {'steps': [], 'percentage': [], 'non_converging': 0, 'rmse_values': [], 'posterior_rmse_values': [], 'tracking_rmse_values': [], 'time_taken': []} for sigma in sigma_options for gvar in gvar_options}
+    else:
+        convergence_data = {(sigma, gvar): {'steps': [], 'percentage': [], 'non_converging': 0, 'rmse_values': [], 'posterior_rmse_values': [], 'time_taken': []} for sigma in sigma_options for gvar in gvar_options}
+    
+    for subfolder in os.listdir(base_folder):
+        print(f"Analyzing {subfolder}")
+        start_index = subfolder.index('[')+1
+        end_index = subfolder.index(']')
+        nums = [int(x) for x in subfolder[start_index:end_index].split()]
+        true_goal = np.array(nums)
+        goal_idx = map_goal_idx[tuple(true_goal)]
+        
+        #Now going in to sigmas
+        for sigma_folder in os.listdir(os.path.join(base_folder, subfolder)):
+            sigma_val = float(sigma_folder.split(':')[1])
+
+            #Going in to G_var Folder
+            for gvar_folder in os.listdir(os.path.join(base_folder, subfolder, sigma_folder)):
+                 gvar_val = float(gvar_folder.split(':')[1])
+
+                 dict_key = (sigma_val, gvar_val)
+                 
+                 # Look for rmse_results.txt file
+                 rmse_file_path = os.path.join(base_folder, subfolder, sigma_folder, gvar_folder, "rmse_results.txt")
+                 if os.path.exists(rmse_file_path):
+                     steps_value = None
+                     percentage_value = None
+                     rmse_value = None
+                     time_value = None
+                     posterior_rmse_value = None
+                     if separate_tracking:
+                        tracking_rmse_value = None
+                     
+                     with open(rmse_file_path, 'r') as f:
+                         for line in f:
+                             if line.startswith("Steps to convergence"):
+                                 # Extract the convergence steps number
+                                 colon_idx = line.rfind(':')
+                                 if colon_idx != -1:
+                                     steps_str = line[colon_idx+1:].strip()
+                                     try:
+                                         steps_value = int(steps_str)
+                                     except ValueError:
+                                         continue
+                             elif line.startswith("Percentage of time"):
+                                 # Extract the percentage value
+                                 colon_idx = line.rfind(':')
+                                 if colon_idx != -1:
+                                     percentage_str = line[colon_idx+1:].strip().replace('%', '')
+                                     try:
+                                         percentage_value = float(percentage_str)
+                                     except ValueError:
+                                         continue
+                             elif line.startswith("Mean RMSE"):
+                                 # Extract the mean RMSE value
+                                 colon_idx = line.rfind(':')
+                                 if colon_idx != -1:
+                                     rmse_str = line[colon_idx+1:].strip()
+                                     try:
+                                         rmse_value = float(rmse_str)
+                                     except ValueError:
+                                         continue
+                             elif line.startswith("Time taken for tracking"):
+                                 colon_idx = line.rfind(':')
+                                 if colon_idx != -1:
+                                     time_str = (line[colon_idx+1:].strip()).split()[0]
+                                     try:
+                                         time_value = float(time_str)
+                                         #print(f"Time value: {time_value}")
+                                     except ValueError:
+                                         print(f"Error parsing time value: {time_str}")
+                                         continue
+                             elif line.startswith("Posterior Weighted RMSE"):
+                                 colon_idx = line.rfind(':')
+                                 if colon_idx != -1:
+                                     posterior_rmse_str = line[colon_idx+1:].strip()
+                                     try:
+                                         posterior_rmse_value = float(posterior_rmse_str)
+                                     except ValueError:
+                                         continue
+                             elif line.startswith("Best Overall Prediction RMSE"):
+                                 colon_idx = line.rfind(':')
+                                 if separate_tracking:
+                                     if colon_idx != -1:
+                                         tracking_rmse_str = line[colon_idx+1:].strip()
+                                         try:
+                                             tracking_rmse_value = float(tracking_rmse_str)
+                                             #print(f"Tracking RMSE value: {tracking_rmse_value}")
+                                         except ValueError:
+                                             print(f"Error parsing tracking RMSE value: {tracking_rmse_str}")
+                                             continue
+                     
+                     # Check if it converged (steps < Tmax) or didn't converge (steps == Tmax)
+                     if steps_value is not None and percentage_value is not None:
+                         if steps_value < Tmax:
+                             # Converged case - add to statistics
+                             convergence_data[dict_key]['steps'].append(steps_value)
+                             convergence_data[dict_key]['percentage'].append(percentage_value)
+                             if rmse_value is not None:
+                                 convergence_data[dict_key]['rmse_values'].append(rmse_value)
+                             if posterior_rmse_value is not None:
+                                 convergence_data[dict_key]['posterior_rmse_values'].append(posterior_rmse_value)
+                             if time_value is not None:
+                                 convergence_data[dict_key]['time_taken'].append(time_value)
+                             if separate_tracking:
+                                 if tracking_rmse_value is not None:
+                                     convergence_data[dict_key]['tracking_rmse_values'].append(tracking_rmse_value)
+                         else:
+                             # Non-converging case - just count it
+                             convergence_data[dict_key]['non_converging'] += 1
+                             if rmse_value is not None:
+                                 convergence_data[dict_key]['rmse_values'].append(rmse_value)
+    
+    # Calculate statistics for each parameter combination
+    results = {}
+    for dict_key in convergence_data:
+        steps_list = convergence_data[dict_key]['steps']
+        percentage_list = convergence_data[dict_key]['percentage']
+        non_converging_count = convergence_data[dict_key]['non_converging']
+        rmse_list = convergence_data[dict_key]['rmse_values']
+        posterior_rmse_list = convergence_data[dict_key]['posterior_rmse_values']
+        if separate_tracking:
+            tracking_rmse_list = convergence_data[dict_key]['tracking_rmse_values']
+        time_list = convergence_data[dict_key]['time_taken']
+        
+        if steps_list and percentage_list:
+            if separate_tracking:
+                results[dict_key] = {
+                    'steps_mean': np.mean(steps_list),
+                    'steps_std': np.std(steps_list),
+                    'percentage_mean': np.mean(percentage_list),
+                    'percentage_std': np.std(percentage_list),
+                    'rmse_mean': np.mean(rmse_list) if rmse_list else 0,
+                    'rmse_std': np.std(rmse_list) if rmse_list else 0,
+                    'posterior_rmse_mean': np.mean(posterior_rmse_list) if posterior_rmse_list else 0,
+                    'posterior_rmse_std': np.std(posterior_rmse_list) if posterior_rmse_list else 0,
+                    'num_converged': len(steps_list),
+                    'num_non_converging': non_converging_count,
+                    'total_samples': len(steps_list) + non_converging_count,
+                    'time_mean': np.mean(time_list) if time_list else 0,
+                    'time_std': np.std(time_list) if time_list else 0,
+                    'tracking_rmse_mean': np.mean(tracking_rmse_list) if tracking_rmse_list else 0,
+                    'tracking_rmse_std': np.std(tracking_rmse_list) if tracking_rmse_list else 0
+                }
+            else:
+                results[dict_key] = {
+                    'steps_mean': np.mean(steps_list),
+                    'steps_std': np.std(steps_list),
+                    'percentage_mean': np.mean(percentage_list),
+                    'percentage_std': np.std(percentage_list),
+                    'rmse_mean': np.mean(rmse_list) if rmse_list else 0,
+                    'rmse_std': np.std(rmse_list) if rmse_list else 0,
+                    'posterior_rmse_mean': np.mean(posterior_rmse_list) if posterior_rmse_list else 0,
+                    'posterior_rmse_std': np.std(posterior_rmse_list) if posterior_rmse_list else 0,
+                    'num_converged': len(steps_list),
+                    'num_non_converging': non_converging_count,
+                    'total_samples': len(steps_list) + non_converging_count,
+                    'time_mean': np.mean(time_list) if time_list else 0,
+                    'time_std': np.std(time_list) if time_list else 0
+                }
+        else:
+            results[dict_key] = {
+                'steps_mean': 0,
+                'steps_std': 0,
+                'percentage_mean': 0,
+                'percentage_std': 0,
+                'rmse_mean': np.mean(rmse_list) if rmse_list else 0,
+                'rmse_std': np.std(rmse_list) if rmse_list else 0,
+                'posterior_rmse_mean': np.mean(posterior_rmse_list) if posterior_rmse_list else 0,
+                'posterior_rmse_std': np.std(posterior_rmse_list) if posterior_rmse_list else 0,
+                'num_converged': 0,
+                'num_non_converging': non_converging_count,
+                'total_samples': non_converging_count,
+                'time_mean': 0,
+                'time_std': 0,
+                'tracking_rmse_mean': 0,
+                'tracking_rmse_std': 0
+            }
+    
+    return results
+
+def save_convergence_matrices_to_txt(convergence_results, filename="convergence_statistics.txt", folder="Debugging", separate_tracking=False):
+    os.makedirs(folder, exist_ok=True)
+    path = os.path.join(folder, filename)
+    
+    with open(path, 'w') as f:
+        f.write("CONVERGENCE AND RMSE STATISTICS BY PARAMETERS\n")
+        f.write("=" * 70 + "\n\n")
+        f.write("Format: sigma_g, G_var -> Steps (mean ± std), Percentage (mean ± std), RMSE (mean ± std), Converged/Total samples\n")
+        f.write("\n" + "=" * 70 + "\n\n")
+        
+        # Sort parameters for consistent output
+        sorted_params = sorted(convergence_results.keys(), key=lambda x: (x[0], x[1]))
+        
+        for (sigma, gvar) in sorted_params:
+            stats = convergence_results[(sigma, gvar)]
+            f.write(f"Parameters: sigma_g={sigma}, G_var={gvar}\n")
+            f.write("-" * 50 + "\n")
+            f.write(f"Steps to convergence: {stats['steps_mean']:.2f} ± {stats['steps_std']:.2f}\n")
+            f.write(f"Percentage in correct goal state: {stats['percentage_mean']:.2f}% ± {stats['percentage_std']:.2f}%\n")
+            f.write(f"Mean RMSE: {stats['rmse_mean']:.6f} ± {stats['rmse_std']:.6f}\n")
+            f.write(f"Mean Posterior Weighted RMSE: {stats['posterior_rmse_mean']:.6f} ± {stats['posterior_rmse_std']:.6f}\n")
+            f.write(f"Converged samples: {stats['num_converged']}\n")
+            f.write(f"Non-converging samples: {stats['num_non_converging']}\n")
+            f.write(f"Total samples: {stats['total_samples']}\n")
+            f.write(f"Convergence rate: {stats['num_converged']/stats['total_samples']*100:.1f}%\n")
+            f.write(f"Time taken for tracking: {stats['time_mean']:.6f} ± {stats['time_std']:.6f} seconds\n")
+            if separate_tracking:
+                f.write(f"Best Overall Prediction RMSE: {stats['tracking_rmse_mean']:.6f} ± {stats['tracking_rmse_std']:.6f}\n")
+            f.write("\n")
+        
+        # Calculate overall statistics across all parameter combinations
+        all_steps = []
+        all_percentages = []
+        all_rmse = []
+        total_converged = 0
+        total_non_converging = 0
+        
+        for stats in convergence_results.values():
+            if stats['num_converged'] > 0:
+                all_steps.extend([stats['steps_mean']] * stats['num_converged'])
+                all_percentages.extend([stats['percentage_mean']] * stats['num_converged'])
+                total_converged += stats['num_converged']
+            if stats['rmse_mean'] > 0:
+                all_rmse.extend([stats['rmse_mean']] * stats['total_samples'])
+            total_non_converging += stats['num_non_converging']
+        
+        if all_steps:
+            f.write("=" * 70 + "\n")
+            f.write("OVERALL STATISTICS (across all parameter combinations):\n")
+            f.write(f"Overall steps to convergence: {np.mean(all_steps):.2f} ± {np.std(all_steps):.2f}\n")
+            f.write(f"Overall percentage in correct goal state: {np.mean(all_percentages):.2f}% ± {np.std(all_percentages):.2f}%\n")
+            f.write(f"Overall mean RMSE: {np.mean(all_rmse):.6f} ± {np.std(all_rmse):.6f}\n")
+            f.write(f"Total converged samples: {total_converged}\n")
+            f.write(f"Total non-converging samples: {total_non_converging}\n")
+            f.write(f"Overall convergence rate: {total_converged/(total_converged+total_non_converging)*100:.1f}%\n")
+                 

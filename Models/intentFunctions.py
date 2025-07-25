@@ -152,7 +152,7 @@ def converging_ise_pred(t,m,v,s2,l,sigma_g=0.0, sigma_c=0.0):
     C = iSE(t,t,s2,l)
 
      # compute Fk
-    d = m.shape[0] - 2 #To account for the goal and convergence dimension in the state
+    d = m.shape[0] - 1 #To account for the goal and convergence dimension in the state
     ftw = solve(C[1:,1:],C[1:,0])
     F = np.eye(d-1,k=-1)
     F[0,:] = ftw
@@ -173,29 +173,30 @@ def converging_ise_pred(t,m,v,s2,l,sigma_g=0.0, sigma_c=0.0):
     P_goal[d,d] = sigma_g
 
     #Create extended transition matrix F_conv and P_conv for convergence dimension
-    F_conv = np.eye(d+2)
-    F_conv[:d+1, :d+1] = F_goal
+    # F_conv = np.eye(d+2)
+    # F_conv[:d+1, :d+1] = F_goal
 
-    P_conv = np.zeros((d+2, d+2))
-    P_conv[:d+1, :d+1] = P_goal
-    P_conv[d+1,d+1] = sigma_c
+    # P_conv = np.zeros((d+2, d+2))
+    # P_conv[:d+1, :d+1] = P_goal
+    # P_conv[d+1,d+1] = sigma_c
 
     #Compute predicted mean and covariance
-    m_pred = F_conv @ m
-    v_pred = F_conv @ v @ F_conv.T + P_conv  
+    m_pred = F_goal @ m
+    v_pred = F_goal @ v @ F_goal.T + P_goal  
 
-    return m_pred, v_pred, F_conv, P_conv
+    return m_pred, v_pred, F_goal, P_goal
 
-def conv_ise_measure(m, sy, t):
-    #Measurement model including the convergence rate parameter
-    x_contribution = np.exp(-1*m[-1]*t)*m[0]
-    goal_contribution = (1-np.exp(-1*m[-1]*t))*m[-2]
-    noise = np.random.normal(0.0, np.sqrt(sy), 2)
-    expected_y = x_contribution + goal_contribution + noise
-    # print("X contribution is:", x_contribution)
-    # print("Goal contribution is:", goal_contribution)
-    # print("Noise is:", noise)
-    return expected_y
+def conv_ise_measure(m, lambda_val,t):
+    #Just returning the expected location from the state mean
+    current_lambda = lambda_val
+    decay_rate = np.exp(-1*current_lambda*t)
+
+    H = np.zeros((1, m.shape[0]))
+    H[0,0] = decay_rate
+    H[0,-2] = decay_rate #New index of initial position
+    H[0, -1] = (1 - decay_rate) #New index of goal
+    expected_loc = H @ m
+    return expected_loc
 
 def lambda_kf_update(y, m, v, sy, t):
     #Mapping matrix H for the observation model that includes the latent goal
@@ -241,10 +242,13 @@ def lambda_kf_update(y, m, v, sy, t):
 
 def fixed_lambda_kf_update(y, m, v, sy, t, lambda_val):
     H = np.zeros((1, m.shape[0]))
-    H[0,0] = np.exp(-1*lambda_val*t)
-    H[0, -1] = (1 - np.exp(-1 * lambda_val * t))
+    decay_rate = np.exp(-1*lambda_val*t)
+    H[0,0] = decay_rate
+    H[0,-2] = decay_rate
+    H[0, -1] = (1 - decay_rate)
 
     Hv = H @ v
+    predicted_loc_updateStep = H @ m.copy()
     HvHs = Hv @ H.T + sy
     KG = (v @ H.T)/HvHs
 
@@ -253,7 +257,46 @@ def fixed_lambda_kf_update(y, m, v, sy, t, lambda_val):
     m_up = m + KG @ y_in
     v_up = v - KG @ H @ v
 
-    return m_up, v_up, KG
+    return m_up, v_up, KG, decay_rate, predicted_loc_updateStep
+
+def fixed_lambda_kf_update_for_PF(y, m, v, sy, t, lambda_val):
+    H = np.zeros((1, m.shape[0]))
+    decay_rate = np.exp(-1*lambda_val*t)
+    H[0,0] = decay_rate
+    H[0,-2] = decay_rate
+    H[0, -1] = (1 - decay_rate)
+
+    Hv = H @ v
+    predicted_loc_updateStep = H @ m.copy()
+    HvHs = Hv @ H.T + sy
+    KG = (v @ H.T)/HvHs
+
+    #Get observation likelihood
+    R = np.eye(2) * sy**2
+    S_k = H @ v @ H.T + R 
+    #print("Shape of predicted_loc_updateStep:", predicted_loc_updateStep.shape)
+    #print("Predicted location update step is:", predicted_loc_updateStep)
+    cur_lambda_state_dist = multivariate_normal(mean=predicted_loc_updateStep[0], cov=S_k)
+    obs_likelihood = cur_lambda_state_dist.logpdf(y)
+    #End of observation likelihood
+
+    y_in = (y - (H @ m).flatten()).reshape(1,-1)
+
+    m_up = m + KG @ y_in
+    v_up = v - KG @ H @ v
+
+    return m_up, v_up, KG, decay_rate, obs_likelihood
+
+def systematic_resample_particles(weights):
+    num_particles = len(weights)
+    cumulative_weights = np.cumsum(weights)
+    random_start = np.random.uniform(0, 1/num_particles)
+    U_i = random_start + (np.arange(num_particles) / num_particles)
+
+    indices = np.searchsorted(cumulative_weights, U_i)
+
+    return indices
+
 
 #####################
 ## Generating Goal Driven Track ##
@@ -329,10 +372,10 @@ def gen_gp_bridge(Tmax, s2, l, goal, dt=1, start=None):
         C_cross = C[np.ix_(rest_idx, obs_idx)]
         # Choose start value
         if start is not None:
-            start_val = start[dim]
+            start_val = start[dim] - goal[dim]
         else:
-            start_val = np.random.normal(0, np.sqrt(s2))
-        y_obs = np.array([start_val, goal[dim]])
+            start_val = np.random.normal(0, np.sqrt(s2)) - goal[dim]
+        y_obs = np.array([start_val, 0])
         mu = np.zeros(Tmax)
         mu_obs = mu[obs_idx]
         mu_rest = mu[rest_idx]
@@ -342,5 +385,79 @@ def gen_gp_bridge(Tmax, s2, l, goal, dt=1, start=None):
         # Sample the interior points
         traj[rest_idx, dim] = np.random.multivariate_normal(cond_mean, cond_cov)
         traj[0, dim] = start_val
-        traj[-1, dim] = goal[dim]
+        traj[-1, dim] = 0
+
+        #Add goal back
+        traj[:, dim] += goal[dim]
     return traj
+
+def gen_iSE_track_goal_converging(Tmax, d, s2, l, dim=2, dt=1, first_is_last=False, lambda_val=0.05, goal=np.array([50,50]), varying_lambda=False, lambda_values=None):
+    # initiate track object
+    x = np.zeros([Tmax,dim])
+    
+    # get prior variance
+    t = dt * np.arange(d,0,-1)
+    C = iSE(t,t,s2,l)
+    
+    # sample over initial window
+    sqrt_C = cholesky(C)
+    initial_window = sqrt_C.T @ norm.rvs(size=[d,dim])
+    x[-d:,:] = initial_window
+    
+    # common quantities
+    g = solve(C[1:,1:],C[1:,0])
+    q = C[0,0] - C[0,1:] @ g
+
+    iSE_contributions = []
+    iSE_contributions_final = []
+    decay_rate = []
+    goal_contributions = []
+
+    x_final = np.zeros([Tmax,dim])
+    x_final[-d:,:] = initial_window
+
+    for k in range(d,Tmax):
+        
+        # prepare next sample
+        x_star = x[d-k-1,:]
+        mean = x_star + g.T @ (x[-k:d-k-1,:] - x_star)
+        
+        # sample next step
+        cur_contribution = norm.rvs(mean,q**0.5)
+        x[-k-1,:] = cur_contribution
+        iSE_contributions.append(cur_contribution)
+
+    if varying_lambda:
+        for k in range(d, Tmax):
+            cur_lambda = lambda_values[k]
+            print("Current lambda is:", cur_lambda)
+            print("Current time is:", k)
+            decay_rate.append(np.exp(-1*cur_lambda*(Tmax-k)))
+            iSE_contribution = np.exp(-1*cur_lambda*(Tmax-k))*x[-k-1,:]
+            print("Amount of iSE contribution is:", np.exp(-1*cur_lambda*(Tmax-k)))
+            print("ise Contribution at time", k, "is:", iSE_contribution)
+            iSE_contributions_final.append(iSE_contribution)
+            goal_contribution = (1-np.exp(-1*cur_lambda*(Tmax-k)))*goal
+            print("Amount of goal contribution is:", (1-np.exp(-1*cur_lambda*(Tmax-k))))
+            print("Goal contribution at time", k, "is:", goal_contribution)
+            x_final[-k-1,:] = iSE_contribution + goal_contribution
+            print("Final contribution at time", k, "is:", x_final[-k-1,:])
+            goal_contributions.append(goal_contribution)
+    else:
+        for k in range(d,Tmax):
+            decay_rate.append(np.exp(-1*lambda_val*(Tmax-k)))
+            iSE_contribution = np.exp(-1*lambda_val*(Tmax-k))*x[-k-1,:]
+            iSE_contributions_final.append(iSE_contribution)
+            goal_contribution = (1-np.exp(-1*lambda_val*(Tmax-k)))*goal
+            x_final[-k-1,:] = iSE_contribution + goal_contribution
+            goal_contributions.append(goal_contribution)
+
+    ##Remove last d points from x_final as they are the initial window
+    x_final = x_final[:-d,:]
+
+    return x_final, iSE_contributions, goal_contributions, decay_rate, iSE_contributions_final
+    
+    if not first_is_last:
+        x = x[::-1,:]
+    
+    return x

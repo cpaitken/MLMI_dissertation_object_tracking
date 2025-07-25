@@ -1,7 +1,13 @@
+import sys
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 import seaborn as sns
 import pandas as pd
 from dataFunctions import get_rmse_data_for_visualization
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 15})
 import numpy as np
 import matplotlib.colors as mcolors
 from matplotlib.colors import LinearSegmentedColormap
@@ -83,34 +89,45 @@ def create_annotation_matrix_simple(matrix):
 
 s2_vals, ls_vals, se_matrix, gse_matrix, imp_matrix = get_rmse_data_for_visualization("Debugging/gSE_Params/s2Ls")
 
+# Convert to numpy arrays for filtering
+s2_vals = np.array(s2_vals)
+ls_vals = np.array(ls_vals)
+
+# Filter s2 values up to 1000
+s2_filter = s2_vals <= 5000
+s2_vals_filtered = s2_vals[s2_filter]
+se_matrix_filtered = se_matrix[:, s2_filter]
+gse_matrix_filtered = gse_matrix[:, s2_filter]
+imp_matrix_filtered = imp_matrix[:, s2_filter]
+
 # SE Model RMSE
-se_df = pd.DataFrame(se_matrix, index=ls_vals, columns=s2_vals)
-se_annot = create_annotation_matrix_simple(se_matrix)
-plt.figure(figsize=(6, 6))
-sns.heatmap(se_df, annot=se_annot, fmt='', cmap='Reds', square=True)
-plt.title('SE Model RMSE')
+se_df = pd.DataFrame(se_matrix_filtered, index=ls_vals, columns=s2_vals_filtered)
+se_annot = create_annotation_matrix_simple(se_matrix_filtered)
+plt.figure(figsize=(5, 6))
+sns.heatmap(se_df, annot=se_annot, fmt='', cmap='Reds', square=True, annot_kws={'size': 10})
+#plt.title('SE Model RMSE')
 plt.xlabel('s2')
 plt.ylabel('ls')
 plt.tight_layout()
 plt.show()
 
 # GSE Model RMSE
-gse_df = pd.DataFrame(gse_matrix, index=ls_vals, columns=s2_vals)
-gse_annot = create_annotation_matrix_simple(gse_matrix)
-plt.figure(figsize=(6, 6))
-sns.heatmap(gse_df, annot=gse_annot, fmt='', cmap='Blues', square=True)
-plt.title('GSE Model RMSE')
+gse_df = pd.DataFrame(gse_matrix_filtered, index=ls_vals, columns=s2_vals_filtered)
+gse_annot = create_annotation_matrix_simple(gse_matrix_filtered)
+plt.figure(figsize=(5, 6))
+sns.heatmap(gse_df, annot=gse_annot, fmt='', cmap='Blues', square=True, annot_kws={'size': 10})
+#plt.title('GSE Model RMSE')
 plt.xlabel('s2')
 plt.ylabel('ls')
 plt.tight_layout()
 plt.show()
 
 # Improvement: white for <=0, green for >0, darker green for higher improvement
-imp_df = pd.DataFrame(imp_matrix, index=ls_vals, columns=s2_vals)
-imp_annot = create_annotation_matrix_simple(imp_matrix)
+imp_df = pd.DataFrame(imp_matrix_filtered, index=ls_vals, columns=s2_vals_filtered)
+imp_annot = create_annotation_matrix_simple(imp_matrix_filtered)
 
 # Create a custom colormap: white for 0 or less, green for positive
-max_improvement = np.nanmax(imp_matrix)
+max_improvement = np.nanmax(imp_matrix_filtered)
 # We'll use 256 colors, first color is white, rest are from Greens
 n_colors = 256
 colors = plt.get_cmap('Greens', n_colors)
@@ -132,9 +149,9 @@ class ZeroWhiteNormalize(mcolors.Normalize):
 
 norm = ZeroWhiteNormalize(vmin=0, vmax=max_improvement)
 
-plt.figure(figsize=(6, 6))
-sns.heatmap(imp_df, annot=imp_annot, fmt='', cmap=custom_green, square=True, norm=norm, cbar_kws={'label': 'Improvement (%)'})
-plt.title('GSE Improvement over SE (%)')
+plt.figure(figsize=(5, 6))
+sns.heatmap(imp_df, annot=imp_annot, fmt='', cmap=custom_green, square=True, norm=norm, cbar_kws={'label': 'Improvement (%)'}, annot_kws={'size': 10})
+#plt.title('GSE Improvement over SE (%)')
 plt.xlabel('s2')
 plt.ylabel('ls')
 plt.tight_layout()

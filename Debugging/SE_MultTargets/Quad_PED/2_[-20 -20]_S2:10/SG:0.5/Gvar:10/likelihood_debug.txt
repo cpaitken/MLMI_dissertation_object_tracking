@@ -1,0 +1,2156 @@
+Likelihood Debug Information
+========================================
+
+Goal options: [array([-20,  20]), array([20, 20]), array([ 20, -20]), array([-20, -20])]
+Goal probabilities: [0.25, 0.25, 0.25, 0.25]
+
+Time step 0:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [0. 0.]
+      Component 1: [0. 0.]
+      Component 2: [0. 0.]
+      Component 3: [0. 0.]
+      Component 4: [0. 0.]
+      Component 5: [-20.  20.]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+   12.5005   11.5005
+   11.5005   12.5005
+
+    Predicted goal: [-3.03059693  3.81554716]
+    Goal variance: 1.680320
+    Predicted y: [-20.  20.]
+    Data: [0.20240345 0.73209502]
+    PED: -392.9123312582076
+    Running likelihood: 0.0
+    Posterior: 0.25
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [0. 0.]
+      Component 1: [0. 0.]
+      Component 2: [0. 0.]
+      Component 3: [0. 0.]
+      Component 4: [0. 0.]
+      Component 5: [20. 20.]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+   12.5005   11.5005
+   11.5005   12.5005
+
+    Predicted goal: [3.37062239 3.81554716]
+    Goal variance: 1.680320
+    Predicted y: [20. 20.]
+    Data: [0.20240345 0.73209502]
+    PED: -19.393479929970283
+    Running likelihood: 0.0
+    Posterior: 0.25
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [0. 0.]
+      Component 1: [0. 0.]
+      Component 2: [0. 0.]
+      Component 3: [0. 0.]
+      Component 4: [0. 0.]
+      Component 5: [ 20. -20.]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+   12.5005   11.5005
+   11.5005   12.5005
+
+    Predicted goal: [ 3.37062239 -2.58567216]
+    Goal variance: 1.680320
+    Predicted y: [ 20. -20.]
+    Data: [0.20240345 0.73209502]
+    PED: -414.0999938838102
+    Running likelihood: 0.0
+    Posterior: 0.25
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [0. 0.]
+      Component 1: [0. 0.]
+      Component 2: [0. 0.]
+      Component 3: [0. 0.]
+      Component 4: [0. 0.]
+      Component 5: [-20. -20.]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+   12.5005   11.5005
+   11.5005   12.5005
+
+    Predicted goal: [-3.03059693 -2.58567216]
+    Goal variance: 1.680320
+    Predicted y: [-20. -20.]
+    Data: [0.20240345 0.73209502]
+    PED: -20.95091850531546
+    Running likelihood: 0.0
+    Posterior: 0.25
+    Selected goal: [-20.  20.]
+
+Time step 1:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [ 1.5868418  -1.51343958]
+      Component 1: [ 1.61686676 -1.54207568]
+      Component 2: [ 1.58413204 -1.51085516]
+      Component 3: [ 1.49187937 -1.42286981]
+      Component 4: [ 1.34990828 -1.28746584]
+      Component 5: [-3.03059693  3.81554716]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4604    1.4604
+    1.4604    2.4604
+
+    Predicted goal: [-3.28072918  3.15570752]
+    Goal variance: 1.433444
+    Predicted y: [-1.44375513  2.30210758]
+    Data: [-1.89774308  1.10450414]
+    PED: -2.8331871374889395
+    Running likelihood: -2.8331871374889395
+    Posterior: 0.7699650152384128
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-1.55504536 -1.51343958]
+      Component 1: [-1.58446869 -1.54207568]
+      Component 2: [-1.55238989 -1.51085516]
+      Component 3: [-1.46198574 -1.42286981]
+      Component 4: [-1.32285941 -1.28746584]
+      Component 5: [3.37062239 3.81554716]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4604    1.4604
+    1.4604    2.4604
+
+    Predicted goal: [1.32470657 3.15570752]
+    Goal variance: 1.433444
+    Predicted y: [1.81557703 2.30210758]
+    Data: [-1.89774308  1.10450414]
+    PED: -5.641026428757176
+    Running likelihood: -5.641026428757176
+    Posterior: 0.04645600742005727
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-1.55504536  1.62844758]
+      Component 1: [-1.58446869  1.65925976]
+      Component 2: [-1.55238989  1.62566677]
+      Component 3: [-1.46198574  1.5309953 ]
+      Component 4: [-1.32285941  1.38530184]
+      Component 5: [ 3.37062239 -2.58567216]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4604    1.4604
+    1.4604    2.4604
+
+    Predicted goal: [ 1.32470657 -1.44972823]
+    Goal variance: 1.433444
+    Predicted y: [ 1.81557703 -0.95722458]
+    Data: [-1.89774308  1.10450414]
+    PED: -11.03274342437604
+    Running likelihood: -11.03274342437604
+    Posterior: 0.00021156749463675407
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [1.5868418  1.62844758]
+      Component 1: [1.61686676 1.65925976]
+      Component 2: [1.58413204 1.62566677]
+      Component 3: [1.49187937 1.5309953 ]
+      Component 4: [1.34990828 1.38530184]
+      Component 5: [-3.03059693 -2.58567216]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4604    1.4604
+    1.4604    2.4604
+
+    Predicted goal: [-3.28072918 -1.44972823]
+    Goal variance: 1.433444
+    Predicted y: [-1.44375513 -0.95722458]
+    Data: [-1.89774308  1.10450414]
+    PED: -4.268040372370659
+    Running likelihood: -4.268040372370659
+    Posterior: 0.18336740984689323
+    Selected goal: [-20.  20.]
+
+Time step 2:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [ 1.47132938 -1.49902217]
+      Component 1: [ 1.56750729 -1.56444329]
+      Component 2: [ 1.60525262 -1.57271333]
+      Component 3: [ 1.57992726 -1.52194721]
+      Component 4: [ 1.49420942 -1.41672321]
+      Component 5: [-3.28072918  3.15570752]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1780    1.1780
+    1.1780    2.1780
+
+    Predicted goal: [-3.94289013  2.76429875]
+    Goal variance: 1.402592
+    Predicted y: [-1.80939981  1.65668535]
+    Data: [-3.15065288  0.86385965]
+    PED: -2.857714571685684
+    Running likelihood: -5.690901709174623
+    Posterior: 0.876072249069182
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-1.68602648 -1.49902217]
+      Component 1: [-1.71318879 -1.56444329]
+      Component 2: [-1.67946459 -1.57271333]
+      Component 3: [-1.58678217 -1.52194721]
+      Component 4: [-1.44292745 -1.41672321]
+      Component 5: [1.32470657 3.15570752]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1780    1.1780
+    1.1780    2.1780
+
+    Predicted goal: [-0.05235446  2.76429875]
+    Goal variance: 1.402592
+    Predicted y: [-0.36131992  1.65668535]
+    Data: [-3.15065288  0.86385965]
+    PED: -4.395638871862532
+    Running likelihood: -10.036665300619708
+    Posterior: 0.011355304279914824
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-1.68602648  1.6583337 ]
+      Component 1: [-1.71318879  1.71625279]
+      Component 2: [-1.67946459  1.71200388]
+      Component 3: [-1.58678217  1.64476223]
+      Component 4: [-1.44292745  1.52041366]
+      Component 5: [ 1.32470657 -1.44972823]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1780    1.1780
+    1.1780    2.1780
+
+    Predicted goal: [-0.05235446 -1.12623691]
+    Goal variance: 1.402592
+    Predicted y: [-0.36131992  0.20860546]
+    Data: [-3.15065288  0.86385965]
+    PED: -5.748816582505329
+    Running likelihood: -16.78156000688137
+    Posterior: 1.3363746359335655e-05
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [1.47132938 1.6583337 ]
+      Component 1: [1.56750729 1.71625279]
+      Component 2: [1.60525262 1.71200388]
+      Component 3: [1.57992726 1.64476223]
+      Component 4: [1.49420942 1.52041366]
+      Component 5: [-3.28072918 -1.44972823]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1780    1.1780
+    1.1780    2.1780
+
+    Predicted goal: [-3.94289013 -1.12623691]
+    Goal variance: 1.402592
+    Predicted y: [-1.80939981  0.20860546]
+    Data: [-3.15065288  0.86385965]
+    PED: -3.474831635287038
+    Running likelihood: -7.742872007657697
+    Posterior: 0.11255908290454353
+    Selected goal: [-20.  20.]
+
+Time step 3:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [ 1.22123563 -1.44741052]
+      Component 1: [ 1.40804249 -1.53643157]
+      Component 2: [ 1.54631602 -1.57696963]
+      Component 3: [ 1.62127083 -1.56324484]
+      Component 4: [ 1.62589149 -1.49477737]
+      Component 5: [-3.94289013  2.76429875]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1733    1.1733
+    1.1733    2.1733
+
+    Predicted goal: [-4.19988859  2.33519311]
+    Goal variance: 1.431511
+    Predicted y: [-2.7216545   1.31688823]
+    Data: [-3.27366065  0.39521365]
+    PED: -2.638250450862459
+    Running likelihood: -8.329152160037083
+    Posterior: 0.8669630806703201
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-1.82384294 -1.44741052]
+      Component 1: [-1.81764087 -1.53643157]
+      Component 2: [-1.75725915 -1.57696963]
+      Component 3: [-1.64615237 -1.56324484]
+      Component 4: [-1.4911928  -1.49477737]
+      Component 5: [-0.05235446  2.76429875]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1733    1.1733
+    1.1733    2.1733
+
+    Predicted goal: [-0.70297386  2.33519311]
+    Goal variance: 1.431511
+    Predicted y: [-1.87619741  1.31688823]
+    Data: [-3.27366065  0.39521365]
+    PED: -2.9002249834814675
+    Running likelihood: -12.936890284101175
+    Posterior: 0.008647396292296307
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-1.82384294  1.59766805]
+      Component 1: [-1.81764087  1.6892518 ]
+      Component 2: [-1.75725915  1.72660555]
+      Component 3: [-1.64615237  1.70417836]
+      Component 4: [-1.4911928   1.62230692]
+      Component 5: [-0.05235446 -1.12623691]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1733    1.1733
+    1.1733    2.1733
+
+    Predicted goal: [-0.70297386 -1.16172162]
+    Goal variance: 1.431511
+    Predicted y: [-1.87619741  0.47143114]
+    Data: [-3.27366065  0.39521365]
+    PED: -3.040509356864572
+    Running likelihood: -19.822069363745943
+    Posterior: 8.84484203578585e-06
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [1.22123563 1.59766805]
+      Component 1: [1.40804249 1.6892518 ]
+      Component 2: [1.54631602 1.72660555]
+      Component 3: [1.62127083 1.70417836]
+      Component 4: [1.62589149 1.62230692]
+      Component 5: [-3.94289013 -1.12623691]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.1733    1.1733
+    1.1733    2.1733
+
+    Predicted goal: [-4.19988859 -1.16172162]
+    Goal variance: 1.431511
+    Predicted y: [-2.7216545   0.47143114]
+    Data: [-3.27366065  0.39521365]
+    PED: -2.527929697136126
+    Running likelihood: -10.270801704793822
+    Posterior: 0.12438067819534754
+    Selected goal: [-20.  20.]
+
+Time step 4:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [ 0.93793023 -1.43300798]
+      Component 1: [ 1.18022077 -1.51589229]
+      Component 2: [ 1.39247502 -1.56242428]
+      Component 3: [ 1.55252543 -1.56660189]
+      Component 4: [ 1.64416629 -1.52501671]
+      Component 5: [-4.19988859  2.33519311]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2240    1.2240
+    1.2240    2.2240
+
+    Predicted goal: [-5.40824362  1.26093262]
+    Goal variance: 1.517232
+    Predicted y: [-3.26195837  0.90218512]
+    Data: [-6.06168094 -1.5868444 ]
+    PED: -4.508962668345642
+    Running likelihood: -12.838114828382725
+    Posterior: 0.8404353224339881
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-1.94799743 -1.43300798]
+      Component 1: [-1.9276765  -1.51589229]
+      Component 2: [-1.8570516  -1.56242428]
+      Component 3: [-1.74153937 -1.56660189]
+      Component 4: [-1.58819004 -1.52501671]
+      Component 5: [-0.70297386  2.33519311]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2240    1.2240
+    1.2240    2.2240
+
+    Predicted goal: [-2.17502976  1.26093262]
+    Goal variance: 1.517232
+    Predicted y: [-2.65097129  0.90218512]
+    Data: [-6.06168094 -1.5868444 ]
+    PED: -5.192856175888839
+    Running likelihood: -18.129746459990013
+    Posterior: 0.004230365377478859
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-1.94799743  1.45291967]
+      Component 1: [-1.9276765   1.59200498]
+      Component 2: [-1.8570516   1.68710234]
+      Component 3: [-1.74153937  1.7274629 ]
+      Component 4: [-1.58819004  1.70733962]
+      Component 5: [-0.70297386 -1.16172162]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2240    1.2240
+    1.2240    2.2240
+
+    Predicted goal: [-2.17502976 -1.97228123]
+    Goal variance: 1.517232
+    Predicted y: [-2.65097129  0.29119805]
+    Data: [-6.06168094 -1.5868444 ]
+    PED: -5.072097308489813
+    Running likelihood: -24.894166672235755
+    Posterior: 4.882334241695258e-06
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [0.93793023 1.45291967]
+      Component 1: [1.18022077 1.59200498]
+      Component 2: [1.39247502 1.68710234]
+      Component 3: [1.55252543 1.7274629 ]
+      Component 4: [1.64416629 1.70733962]
+      Component 5: [-4.19988859 -1.16172162]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2240    1.2240
+    1.2240    2.2240
+
+    Predicted goal: [-5.40824362 -1.97228123]
+    Goal variance: 1.517232
+    Predicted y: [-3.26195837  0.29119805]
+    Data: [-6.06168094 -1.5868444 ]
+    PED: -4.25568490673024
+    Running likelihood: -14.526486611524062
+    Posterior: 0.15532942985429177
+    Selected goal: [-20.  20.]
+
+Time step 5:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [ 0.1800477  -1.77441269]
+      Component 1: [ 0.60543296 -1.7286071 ]
+      Component 2: [ 1.01858898 -1.65958734]
+      Component 3: [ 1.37756583 -1.57567896]
+      Component 4: [ 1.6488794  -1.48094059]
+      Component 5: [-5.40824362  1.26093262]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2808    1.2808
+    1.2808    2.2808
+
+    Predicted goal: [-7.0139423   0.44526588]
+    Goal variance: 1.670679
+    Predicted y: [-5.22819592 -0.51348007]
+    Data: [-9.34752028 -2.60602451]
+    PED: -6.208465956742559
+    Running likelihood: -19.046580785125286
+    Posterior: 0.8624755935867406
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-2.53621107 -1.77441269]
+      Component 1: [-2.353056  -1.7286071]
+      Component 2: [-2.1245814  -1.65958734]
+      Component 3: [-1.87521444 -1.57567896]
+      Component 4: [-1.62415794 -1.48094059]
+      Component 5: [-2.17502976  1.26093262]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2808    1.2808
+    1.2808    2.2808
+
+    Predicted goal: [-3.98223579  0.44526588]
+    Goal variance: 1.670679
+    Predicted y: [-4.71124084 -0.51348007]
+    Data: [-9.34752028 -2.60602451]
+    PED: -7.268720179023038
+    Running likelihood: -25.39846663901305
+    Posterior: 0.0015036883610769832
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-2.53621107  0.94184607]
+      Component 1: [-2.353056    1.22988187]
+      Component 2: [-2.1245814   1.48358304]
+      Component 3: [-1.87521444  1.67710132]
+      Component 4: [-1.62415794  1.79209675]
+      Component 5: [-2.17502976 -1.97228123]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2808    1.2808
+    1.2808    2.2808
+
+    Predicted goal: [-3.98223579 -2.58644063]
+    Goal variance: 1.670679
+    Predicted y: [-4.71124084 -1.03043515]
+    Data: [-9.34752028 -2.60602451]
+    PED: -7.523462697948732
+    Running likelihood: -32.417629370184486
+    Posterior: 1.3451607802613726e-06
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [0.1800477  0.94184607]
+      Component 1: [0.60543296 1.22988187]
+      Component 2: [1.01858898 1.48358304]
+      Component 3: [1.37756583 1.67710132]
+      Component 4: [1.6488794  1.79209675]
+      Component 5: [-5.40824362 -1.97228123]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.2808    1.2808
+    1.2808    2.2808
+
+    Predicted goal: [-7.0139423  -2.58644063]
+    Goal variance: 1.670679
+    Predicted y: [-5.22819592 -1.03043515]
+    Data: [-9.34752028 -2.60602451]
+    PED: -6.367103701493381
+    Running likelihood: -20.89359031301744
+    Posterior: 0.13601937289140392
+    Selected goal: [-20.  20.]
+
+Time step 6:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-1.22543456 -2.29971971]
+      Component 1: [-0.52751679 -2.13384303]
+      Component 2: [ 0.19988559 -1.93461804]
+      Component 3: [ 0.87979142 -1.73009406]
+      Component 4: [ 1.44605408 -1.54088813]
+      Component 5: [-7.0139423   0.44526588]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3216    1.3216
+    1.3216    2.3216
+
+    Predicted goal: [-8.26151425 -1.07960739]
+    Goal variance: 1.887609
+    Predicted y: [-8.23937687 -1.85445383]
+    Data: [-11.81220676  -6.22142667]
+    PED: -6.967876594903298
+    Running likelihood: -26.014457380028585
+    Posterior: 0.7710333887817961
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-3.78671768 -2.29971971]
+      Component 1: [-3.33257145 -2.13384303]
+      Component 2: [-2.80949759 -1.93461804]
+      Component 3: [-2.28079737 -1.73009406]
+      Component 4: [-1.79813125 -1.54088813]
+      Component 5: [-3.98223579  0.44526588]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3216    1.3216
+    1.3216    2.3216
+
+    Predicted goal: [-5.39407166 -1.07960739]
+    Goal variance: 1.887609
+    Predicted y: [-7.76895347 -1.85445383]
+    Data: [-11.81220676  -6.22142667]
+    PED: -7.364203832943781
+    Running likelihood: -32.76267047195683
+    Posterior: 0.0009044019219322665
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-3.78671768  0.26156341]
+      Component 1: [-3.33257145  0.67121162]
+      Component 2: [-2.80949759  1.07476513]
+      Component 3: [-2.28079737  1.43049473]
+      Component 4: [-1.79813125  1.7032972 ]
+      Component 5: [-3.98223579 -2.58644063]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3216    1.3216
+    1.3216    2.3216
+
+    Predicted goal: [-5.39407166 -3.94704999]
+    Goal variance: 1.887609
+    Predicted y: [-7.76895347 -2.32487722]
+    Data: [-11.81220676  -6.22142667]
+    PED: -6.8155913435959805
+    Running likelihood: -39.23322071378047
+    Posterior: 1.4003519861072567e-06
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-1.22543456  0.26156341]
+      Component 1: [-0.52751679  0.67121162]
+      Component 2: [0.19988559 1.07476513]
+      Component 3: [0.87979142 1.43049473]
+      Component 4: [1.44605408 1.7032972 ]
+      Component 5: [-7.0139423  -2.58644063]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3216    1.3216
+    1.3216    2.3216
+
+    Predicted goal: [-8.26151425 -3.94704999]
+    Goal variance: 1.887609
+    Predicted y: [-8.23937687 -2.32487722]
+    Data: [-11.81220676  -6.22142667]
+    PED: -6.338986446159027
+    Running likelihood: -27.232576759176467
+    Posterior: 0.2280608089442872
+    Selected goal: [-20.  20.]
+
+Time step 7:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-2.88412753 -3.70259292]
+      Component 1: [-2.01173998 -3.26079944]
+      Component 2: [-1.02677359 -2.74407104]
+      Component 3: [-0.03668179 -2.22376792]
+      Component 4: [ 0.85518906 -1.76016487]
+      Component 5: [-8.26151425 -1.07960739]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3395    1.3395
+    1.3395    2.3395
+
+    Predicted goal: [-8.53694334 -2.25430694]
+    Goal variance: 2.147711
+    Predicted y: [-11.14564179  -4.78220031]
+    Data: [-12.00575191  -8.45055283]
+    PED: -5.8542903842569585
+    Running likelihood: -31.868747764285544
+    Posterior: 0.596743546086474
+    Selected goal: [-20.  20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-5.31339345 -3.70259292]
+      Component 1: [-4.67655349 -3.26079944]
+      Component 2: [-3.89756383 -2.74407104]
+      Component 3: [-3.07721305 -2.22376792]
+      Component 4: [-2.30863906 -1.76016487]
+      Component 5: [-5.39407166 -1.07960739]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3395    1.3395
+    1.3395    2.3395
+
+    Predicted goal: [-5.80981603 -2.25430694]
+    Goal variance: 2.147711
+    Predicted y: [-10.7074651   -4.78220031]
+    Data: [-12.00575191  -8.45055283]
+    PED: -5.569765247721062
+    Running likelihood: -38.33243571967789
+    Posterior: 0.0009303443381045851
+    Selected goal: [-20.  20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-5.31339345 -1.27332701]
+      Component 1: [-4.67655349 -0.59598594]
+      Component 2: [-3.89756383  0.12671921]
+      Component 3: [-3.07721305  0.81676335]
+      Component 4: [-2.30863906  1.40366325]
+      Component 5: [-5.39407166 -3.94704999]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3395    1.3395
+    1.3395    2.3395
+
+    Predicted goal: [-5.80981603 -4.98143425]
+    Goal variance: 2.147711
+    Predicted y: [-10.7074651  -5.220377 ]
+    Data: [-12.00575191  -8.45055283]
+    PED: -4.8157828549623005
+    Running likelihood: -44.04900356874277
+    Posterior: 3.0617508470692286e-06
+    Selected goal: [-20.  20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-2.88412753 -1.27332701]
+      Component 1: [-2.01173998 -0.59598594]
+      Component 2: [-1.02677359  0.12671921]
+      Component 3: [-0.03668179  0.81676335]
+      Component 4: [0.85518906 1.40366325]
+      Component 5: [-8.26151425 -3.94704999]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3395    1.3395
+    1.3395    2.3395
+
+    Predicted goal: [-8.53694334 -4.98143425]
+    Goal variance: 2.147711
+    Predicted y: [-11.14564179  -5.220377  ]
+    Data: [-12.00575191  -8.45055283]
+    PED: -5.030403087707345
+    Running likelihood: -32.26297984688381
+    Posterior: 0.4023230478245721
+    Selected goal: [-20.  20.]
+
+Time step 8:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-3.83621936 -5.2104406 ]
+      Component 1: [-3.10115479 -4.62820984]
+      Component 2: [-2.15793825 -3.88433214]
+      Component 3: [-1.10629552 -3.08323048]
+      Component 4: [-0.06068157 -2.32612649]
+      Component 5: [-8.53694334 -2.25430694]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3420    1.3420
+    1.3420    2.3420
+
+    Predicted goal: [-9.38185573 -3.38664172]
+    Goal variance: 2.423828
+    Predicted y: [-12.3731627   -7.46474755]
+    Data: [-15.10588932 -11.12709342]
+    PED: -5.481218563707111
+    Running likelihood: -37.349966327992654
+    Posterior: 0.47357439160772447
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-6.14782868 -5.2104406 ]
+      Component 1: [-5.64098362 -4.62820984]
+      Component 2: [-4.89723137 -3.88433214]
+      Component 3: [-4.01759761 -3.08323048]
+      Component 4: [-3.11343934 -2.32612649]
+      Component 5: [-5.80981603 -2.25430694]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3420    1.3420
+    1.3420    2.3420
+
+    Predicted goal: [-6.78319948 -3.38664172]
+    Goal variance: 2.423828
+    Predicted y: [-11.95764471  -7.46474755]
+    Data: [-15.10588932 -11.12709342]
+    PED: -5.703609499483541
+    Running likelihood: -44.03604521916143
+    Posterior: 0.0005911001124961952
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-6.14782868 -2.89883128]
+      Component 1: [-5.64098362 -2.08838101]
+      Component 2: [-4.89723137 -1.14503902]
+      Component 3: [-4.01759761 -0.17192838]
+      Component 4: [-3.11343934  0.72663128]
+      Component 5: [-5.80981603 -4.98143425]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3420    1.3420
+    1.3420    2.3420
+
+    Predicted goal: [-6.78319948 -5.98529796]
+    Goal variance: 2.423828
+    Predicted y: [-11.95764471  -7.88026553]
+    Data: [-15.10588932 -11.12709342]
+    PED: -5.267600243810012
+    Running likelihood: -49.316603812552785
+    Posterior: 3.0084554416692464e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-3.83621936 -2.89883128]
+      Component 1: [-3.10115479 -2.08838101]
+      Component 2: [-2.15793825 -1.14503902]
+      Component 3: [-1.10629552 -0.17192838]
+      Component 4: [-0.06068157  0.72663128]
+      Component 5: [-8.53694334 -4.98143425]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3420    1.3420
+    1.3420    2.3420
+
+    Predicted goal: [-9.38185573 -5.98529796]
+    Goal variance: 2.423828
+    Predicted y: [-12.3731627   -7.88026553]
+    Data: [-15.10588932 -11.12709342]
+    PED: -4.982314672564678
+    Running likelihood: -37.245294519448485
+    Posterior: 0.5258314998243411
+    Selected goal: [-20. -20.]
+
+Time step 9:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-5.2252225  -6.78928126]
+      Component 1: [-4.55720503 -6.17669126]
+      Component 2: [-3.5977366  -5.29371891]
+      Component 3: [-2.44084641 -4.26348003]
+      Component 4: [-1.20890904 -3.22075109]
+      Component 5: [-9.38185573 -3.38664172]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3431    1.3431
+    1.3431    2.3431
+
+    Predicted goal: [-9.78593853 -4.56411584]
+    Goal variance: 2.689372
+    Predicted y: [-14.60707823 -10.17592298]
+    Data: [-15.88449237 -13.89823453]
+    PED: -5.6799018960773475
+    Running likelihood: -43.02986822407
+    Posterior: 0.3045251901482207
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-7.41711808 -6.78928126]
+      Component 1: [-6.97844204 -6.17669126]
+      Component 2: [-6.21307195 -5.29371891]
+      Component 3: [-5.22315643 -4.26348003]
+      Component 4: [-4.13581379 -3.22075109]
+      Component 5: [-6.78319948 -3.38664172]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3431    1.3431
+    1.3431    2.3431
+
+    Predicted goal: [-7.31595237 -4.56411584]
+    Goal variance: 2.689372
+    Predicted y: [-14.20031756 -10.17592298]
+    Data: [-15.88449237 -13.89823453]
+    PED: -5.511099219449751
+    Running likelihood: -49.547144438611184
+    Posterior: 0.0004499933813009155
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.41711808 -4.59738568]
+      Component 1: [-6.97844204 -3.75545425]
+      Component 2: [-6.21307195 -2.67838356]
+      Component 3: [-5.22315643 -1.48117001]
+      Component 4: [-4.13581379 -0.29384634]
+      Component 5: [-6.78319948 -5.98529796]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3431    1.3431
+    1.3431    2.3431
+
+    Predicted goal: [-7.31595237 -7.03410199]
+    Goal variance: 2.689372
+    Predicted y: [-14.20031756 -10.58268364]
+    Data: [-15.88449237 -13.89823453]
+    PED: -4.850868040790219
+    Running likelihood: -54.167471853343
+    Posterior: 4.4322415960534895e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-5.2252225  -4.59738568]
+      Component 1: [-4.55720503 -3.75545425]
+      Component 2: [-3.5977366  -2.67838356]
+      Component 3: [-2.44084641 -1.48117001]
+      Component 4: [-1.20890904 -0.29384634]
+      Component 5: [-9.38185573 -5.98529796]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3431    1.3431
+    1.3431    2.3431
+
+    Predicted goal: [-9.78593853 -7.03410199]
+    Goal variance: 2.689372
+    Predicted y: [-14.60707823 -10.58268364]
+    Data: [-15.88449237 -13.89823453]
+    PED: -4.959386339656163
+    Running likelihood: -42.20468085910465
+    Posterior: 0.695020384228881
+    Selected goal: [-20. -20.]
+
+Time step 10:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-5.97957213 -8.28801598]
+      Component 1: [-5.5533658  -7.74547202]
+      Component 2: [-4.7795636  -6.82463139]
+      Component 3: [-3.7200485  -5.65012877]
+      Component 4: [-2.47944419 -4.37595175]
+      Component 5: [-9.78593853 -4.56411584]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3528    1.3528
+    1.3528    2.3528
+
+    Predicted goal: [-10.61522967  -5.70497052]
+    Goal variance: 2.922564
+    Predicted y: [-15.76551065 -12.85213182]
+    Data: [-18.22812346 -16.23994489]
+    PED: -5.016014931621839
+    Running likelihood: -48.04588315569184
+    Posterior: 0.21576096662694852
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.0344564  -8.28801598]
+      Component 1: [-7.84975043 -7.74547202]
+      Component 2: [-7.27160516 -6.82463139]
+      Component 3: [-6.37433102 -5.65012877]
+      Component 4: [-5.27404471 -4.37595175]
+      Component 5: [-7.31595237 -4.56411584]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3528    1.3528
+    1.3528    2.3528
+
+    Predicted goal: [-8.28503013 -5.70497052]
+    Goal variance: 2.922564
+    Predicted y: [-15.35040878 -12.85213182]
+    Data: [-18.22812346 -16.23994489]
+    PED: -5.206382057680372
+    Running likelihood: -54.753526496291556
+    Posterior: 0.00026356054063087566
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.0344564 -6.2331317]
+      Component 1: [-7.84975043 -5.4490874 ]
+      Component 2: [-7.27160516 -4.33258984]
+      Component 3: [-6.37433102 -2.99584625]
+      Component 4: [-5.27404471 -1.58135123]
+      Component 5: [-7.31595237 -7.03410199]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3528    1.3528
+    1.3528    2.3528
+
+    Predicted goal: [-8.28503013 -8.03517006]
+    Goal variance: 2.922564
+    Predicted y: [-15.35040878 -13.26723369]
+    Data: [-18.22812346 -16.23994489]
+    PED: -4.804272132805178
+    Running likelihood: -58.971743986148184
+    Posterior: 3.880894263840349e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-5.97957213 -6.2331317 ]
+      Component 1: [-5.5533658 -5.4490874]
+      Component 2: [-4.7795636  -4.33258984]
+      Component 3: [-3.7200485  -2.99584625]
+      Component 4: [-2.47944419 -1.58135123]
+      Component 5: [-9.78593853 -7.03410199]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3528    1.3528
+    1.3528    2.3528
+
+    Predicted goal: [-10.61522967  -8.03517006]
+    Goal variance: 2.922564
+    Predicted y: [-15.76551065 -13.26723369]
+    Data: [-18.22812346 -16.23994489]
+    PED: -4.551000670590138
+    Running likelihood: -46.75568152969478
+    Posterior: 0.7839715919381532
+    Selected goal: [-20. -20.]
+
+Time step 11:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-6.83576941 -9.46366251]
+      Component 1: [-6.56620069 -9.09504009]
+      Component 2: [-5.92817837 -8.26110116]
+      Component 3: [-4.95708506 -7.06884741]
+      Component 4: [-3.73591655 -5.67195842]
+      Component 5: [-10.61522967  -5.70497052]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3723    1.3723
+    1.3723    2.3723
+
+    Predicted goal: [-11.18216315  -5.87985998]
+    Goal variance: 3.110298
+    Predicted y: [-17.45099908 -15.16863303]
+    Data: [-19.01363708 -15.6506806 ]
+    PED: -3.069075812839481
+    Running likelihood: -51.11495896853132
+    Posterior: 0.24751855780068027
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.72661234 -9.46366251]
+      Component 1: [-8.719968   -9.09504009]
+      Component 2: [-8.28774199 -8.26110116]
+      Component 3: [-7.47904991 -7.06884741]
+      Component 4: [-6.39287381 -5.67195842]
+      Component 5: [-8.28503013 -5.70497052]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3723    1.3723
+    1.3723    2.3723
+
+    Predicted goal: [-9.01136456 -5.87985998]
+    Goal variance: 3.110298
+    Predicted y: [-17.01164247 -15.16863303]
+    Data: [-19.01363708 -15.6506806 ]
+    PED: -3.4875536211296225
+    Running likelihood: -58.24108011742118
+    Posterior: 0.00019896316166023823
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.72661234 -7.57281957]
+      Component 1: [-8.719968   -6.94127279]
+      Component 2: [-8.28774199 -5.90153754]
+      Component 3: [-7.47904991 -4.54688257]
+      Component 4: [-6.39287381 -3.01500116]
+      Component 5: [-8.28503013 -8.03517006]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3723    1.3723
+    1.3723    2.3723
+
+    Predicted goal: [-9.01136456 -8.05065857]
+    Goal variance: 3.110298
+    Predicted y: [-17.01164247 -15.60798964]
+    Data: [-19.01363708 -15.6506806 ]
+    PED: -3.7368745832591483
+    Running likelihood: -62.708618569407335
+    Posterior: 2.2832074673921056e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-6.83576941 -7.57281957]
+      Component 1: [-6.56620069 -6.94127279]
+      Component 2: [-5.92817837 -5.90153754]
+      Component 3: [-4.95708506 -4.54688257]
+      Component 4: [-3.73591655 -3.01500116]
+      Component 5: [-10.61522967  -8.03517006]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3723    1.3723
+    1.3723    2.3723
+
+    Predicted goal: [-11.18216315  -8.05065857]
+    Goal variance: 3.110298
+    Predicted y: [-17.45099908 -15.60798964]
+    Data: [-19.01363708 -15.6506806 ]
+    PED: -3.2476541436577846
+    Running likelihood: -50.00333567335257
+    Posterior: 0.7522801958301953
+    Selected goal: [-20. -20.]
+
+Time step 12:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.22631751 -9.47269015]
+      Component 1: [-7.17278296 -9.56762553]
+      Component 2: [-6.76088162 -9.15509589]
+      Component 3: [-5.99165833 -8.28068366]
+      Component 4: [-4.91488407 -7.05582912]
+      Component 5: [-11.18216315  -5.87985998]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3955    1.3955
+    1.3955    2.3955
+
+    Predicted goal: [-11.56979958  -6.74663668]
+    Goal variance: 3.250708
+    Predicted y: [-18.40848066 -15.35255012]
+    Data: [-19.40899439 -17.58975472]
+    PED: -3.5778349023045974
+    Running likelihood: -54.692793870835914
+    Posterior: 0.17703078468511957
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.92274587 -9.47269015]
+      Component 1: [-9.15838177 -9.56762553]
+      Component 2: [-8.96938608 -9.15509589]
+      Component 3: [-8.36907018 -8.28068366]
+      Component 4: [-7.42498354 -7.05582912]
+      Component 5: [-9.01136456 -5.87985998]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3955    1.3955
+    1.3955    2.3955
+
+    Predicted goal: [-9.58278975 -6.74663668]
+    Goal variance: 3.250708
+    Predicted y: [-17.93411042 -15.35255012]
+    Data: [-19.40899439 -17.58975472]
+    PED: -3.558170166008054
+    Running likelihood: -61.79925028342923
+    Posterior: 0.00014512892838317956
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.92274587 -7.77626179]
+      Component 1: [-9.15838177 -7.58202672]
+      Component 2: [-8.96938608 -6.94659143]
+      Component 3: [-8.36907018 -5.9032718 ]
+      Component 4: [-7.42498354 -4.54572964]
+      Component 5: [-9.01136456 -8.05065857]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3955    1.3955
+    1.3955    2.3955
+
+    Predicted goal: [-9.58278975 -8.73364651]
+    Goal variance: 3.250708
+    Predicted y: [-17.93411042 -15.82692036]
+    Data: [-19.40899439 -17.58975472]
+    PED: -3.2162126801540896
+    Running likelihood: -65.92483124956142
+    Posterior: 2.3444282193887355e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.22631751 -7.77626179]
+      Component 1: [-7.17278296 -7.58202672]
+      Component 2: [-6.76088162 -6.94659143]
+      Component 3: [-5.99165833 -5.9032718 ]
+      Component 4: [-4.91488407 -4.54572964]
+      Component 5: [-11.18216315  -8.05065857]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.3955    1.3955
+    1.3955    2.3955
+
+    Predicted goal: [-11.56979958  -8.73364651]
+    Goal variance: 3.250708
+    Predicted y: [-18.40848066 -15.82692036]
+    Data: [-19.40899439 -17.58975472]
+    PED: -3.1530422579252466
+    Running likelihood: -53.15637793127782
+    Posterior: 0.8228217419582801
+    Selected goal: [-20. -20.]
+
+Time step 13:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.25382895 -9.53944605]
+      Component 1: [-7.421539   -9.90921632]
+      Component 2: [-7.27183376 -9.78910866]
+      Component 3: [-6.77129277 -9.1783758 ]
+      Component 4: [-5.93092232 -8.14487456]
+      Component 5: [-11.56979958  -6.74663668]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4145    1.4145
+    1.4145    2.4145
+
+    Predicted goal: [-11.94399698  -7.43361523]
+    Goal variance: 3.351453
+    Predicted y: [-18.82362853 -16.28608273]
+    Data: [-19.74384793 -17.97548777]
+    PED: -3.101733458906202
+    Running likelihood: -57.79452732974212
+    Posterior: 0.13875483506252992
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.7278557  -9.53944605]
+      Component 1: [-9.21052708 -9.90921632]
+      Component 2: [-9.3043952  -9.78910866]
+      Component 3: [-8.98473343 -9.1783758 ]
+      Component 4: [-8.27953762 -8.14487456]
+      Component 5: [-9.58278975 -6.74663668]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4145    1.4145
+    1.4145    2.4145
+
+    Predicted goal: [-10.16558626  -7.43361523]
+    Goal variance: 3.351453
+    Predicted y: [-18.31064544 -16.28608273]
+    Data: [-19.74384793 -17.97548777]
+    PED: -3.16222048010333
+    Running likelihood: -64.96147076353256
+    Posterior: 0.00010707402787125417
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.7278557  -8.06541931]
+      Component 1: [-9.21052708 -8.12022824]
+      Component 2: [-9.3043952  -7.75654722]
+      Component 3: [-8.98473343 -6.96493514]
+      Component 4: [-8.27953762 -5.79625926]
+      Component 5: [-9.58278975 -8.73364651]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4145    1.4145
+    1.4145    2.4145
+
+    Predicted goal: [-10.16558626  -9.21202595]
+    Goal variance: 3.351453
+    Predicted y: [-18.31064544 -16.79906582]
+    Data: [-19.74384793 -17.97548777]
+    PED: -2.9703058807562295
+    Running likelihood: -68.89513713031765
+    Posterior: 2.0956296931263107e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.25382895 -8.06541931]
+      Component 1: [-7.421539   -8.12022824]
+      Component 2: [-7.27183376 -7.75654722]
+      Component 3: [-6.77129277 -6.96493514]
+      Component 4: [-5.93092232 -5.79625926]
+      Component 5: [-11.56979958  -8.73364651]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4145    1.4145
+    1.4145    2.4145
+
+    Predicted goal: [-11.94399698  -9.21202595]
+    Goal variance: 3.351453
+    Predicted y: [-18.82362853 -16.79906582]
+    Data: [-19.74384793 -17.97548777]
+    PED: -2.8126055554431546
+    Running likelihood: -55.96898348672097
+    Posterior: 0.8611359952799055
+    Selected goal: [-20. -20.]
+
+Time step 14:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.0896444  -9.20950603]
+      Component 1: [-7.41873279 -9.8421884 ]
+      Component 2: [ -7.49481026 -10.04373297]
+      Component 3: [-7.26008252 -9.76753488]
+      Component 4: [-6.69080497 -9.0306105 ]
+      Component 5: [-11.94399698  -7.43361523]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4255    1.4255
+    1.4255    2.4255
+
+    Predicted goal: [-13.04556634  -8.28226929]
+    Goal variance: 3.424446
+    Predicted y: [-19.03364138 -16.64312126]
+    Data: [-21.65903236 -18.66573447]
+    PED: -4.005373419289466
+    Running likelihood: -61.79990074903158
+    Posterior: 0.1304948856864184
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.32015328 -9.20950603]
+      Component 1: [-8.9846864 -9.8421884]
+      Component 2: [ -9.32464394 -10.04373297]
+      Component 3: [-9.28609314 -9.76753488]
+      Component 4: [-8.85937711 -9.0306105 ]
+      Component 5: [-10.16558626  -7.43361523]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4255    1.4255
+    1.4255    2.4255
+
+    Predicted goal: [-11.4970459   -8.28226929]
+    Goal variance: 3.424446
+    Predicted y: [-18.48573953 -16.64312126]
+    Data: [-21.65903236 -18.66573447]
+    PED: -4.5956923025008205
+    Running likelihood: -69.55716306603338
+    Posterior: 5.5802964646009934e-05
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.32015328 -7.97899716]
+      Component 1: [-8.9846864  -8.27623479]
+      Component 2: [-9.32464394 -8.21389929]
+      Component 3: [-9.28609314 -7.74152426]
+      Component 4: [-8.85937711 -6.86203835]
+      Component 5: [-10.16558626  -9.21202595]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4255    1.4255
+    1.4255    2.4255
+
+    Predicted goal: [-11.4970459   -9.83078973]
+    Goal variance: 3.424446
+    Predicted y: [-18.48573953 -17.19102311]
+    Data: [-21.65903236 -18.66573447]
+    PED: -4.6358329062842305
+    Running likelihood: -73.53097003660189
+    Posterior: 1.0491916675528148e-06
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.0896444  -7.97899716]
+      Component 1: [-7.41873279 -8.27623479]
+      Component 2: [-7.49481026 -8.21389929]
+      Component 3: [-7.26008252 -7.74152426]
+      Component 4: [-6.69080497 -6.86203835]
+      Component 5: [-11.94399698  -9.21202595]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4255    1.4255
+    1.4255    2.4255
+
+    Predicted goal: [-13.04556634  -9.83078973]
+    Goal variance: 3.424446
+    Predicted y: [-19.03364138 -17.19102311]
+    Data: [-21.65903236 -18.66573447]
+    PED: -3.9343924691209127
+    Running likelihood: -59.90337595584189
+    Posterior: 0.8694482621572664
+    Selected goal: [-20. -20.]
+
+Time step 15:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.27810084 -8.77817578]
+      Component 1: [-7.53104849 -9.54956577]
+      Component 2: [-7.59452488 -9.97761943]
+      Component 3: [-7.42229907 -9.98787002]
+      Component 4: [-6.98481678 -9.5554689 ]
+      Component 5: [-13.04556634  -8.28226929]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4297    1.4297
+    1.4297    2.4297
+
+    Predicted goal: [-14.46984976  -9.0756046 ]
+    Goal variance: 3.481039
+    Predicted y: [-20.32366718 -17.06044507]
+    Data: [-23.65772822 -18.91753918]
+    PED: -4.8040887628270195
+    Running likelihood: -66.6039895118586
+    Posterior: 0.14734118329167073
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.25408508 -8.77817578]
+      Component 1: [-8.85367551 -9.54956577]
+      Component 2: [-9.19716514 -9.97761943]
+      Component 3: [-9.23700014 -9.98787002]
+      Component 4: [-8.95338125 -9.5554689 ]
+      Component 5: [-11.4970459   -8.28226929]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4297    1.4297
+    1.4297    2.4297
+
+    Predicted goal: [-13.16591207  -9.0756046 ]
+    Goal variance: 3.481039
+    Predicted y: [-19.75113098 -17.06044507]
+    Data: [-23.65772822 -18.91753918]
+    PED: -5.715125226012287
+    Running likelihood: -75.27228829204567
+    Posterior: 2.533552018654081e-05
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.25408508 -7.80219154]
+      Component 1: [-8.85367551 -8.22693875]
+      Component 2: [-9.19716514 -8.37497917]
+      Component 3: [-9.23700014 -8.17316895]
+      Component 4: [-8.95338125 -7.58690443]
+      Component 5: [-11.4970459   -9.83078973]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4297    1.4297
+    1.4297    2.4297
+
+    Predicted goal: [-13.16591207 -10.37954229]
+    Goal variance: 3.481039
+    Predicted y: [-19.75113098 -17.63298127]
+    Data: [-23.65772822 -18.91753918]
+    PED: -5.977503503499633
+    Running likelihood: -79.50847354010152
+    Posterior: 3.664189687155531e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.27810084 -7.80219154]
+      Component 1: [-7.53104849 -8.22693875]
+      Component 2: [-7.59452488 -8.37497917]
+      Component 3: [-7.42229907 -8.17316895]
+      Component 4: [-6.98481678 -7.58690443]
+      Component 5: [-13.04556634  -9.83078973]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4297    1.4297
+    1.4297    2.4297
+
+    Predicted goal: [-14.46984976 -10.37954229]
+    Goal variance: 3.481039
+    Predicted y: [-20.32366718 -17.63298127]
+    Data: [-23.65772822 -18.91753918]
+    PED: -4.945035084942265
+    Running likelihood: -64.84841104078416
+    Posterior: 0.8526331147691714
+    Selected goal: [-20. -20.]
+
+Time step 16:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.74453435 -8.24881414]
+      Component 1: [-7.81568154 -9.07761179]
+      Component 2: [-7.72996734 -9.66036488]
+      Component 3: [-7.4753882  -9.91125951]
+      Component 4: [-7.04160882 -9.77582302]
+      Component 5: [-14.46984976  -9.0756046 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4307    1.4307
+    1.4307    2.4307
+
+    Predicted goal: [-14.80841621 -10.58840749]
+    Goal variance: 3.529828
+    Predicted y: [-22.2143841  -17.32441874]
+    Data: [-23.00019357 -20.83561965]
+    PED: -5.565781421098508
+    Running likelihood: -72.1697709329571
+    Posterior: 0.059257562067338496
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.4671987  -8.24881414]
+      Component 1: [-8.88398095 -9.07761179]
+      Component 2: [-9.08675337 -9.66036488]
+      Component 3: [-9.05756991 -9.91125951]
+      Component 4: [-8.79093647 -9.77582302]
+      Component 5: [-13.16591207  -9.0756046 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4307    1.4307
+    1.4307    2.4307
+
+    Predicted goal: [-13.75492046 -10.58840749]
+    Goal variance: 3.529828
+    Predicted y: [-21.63311077 -17.32441874]
+    Data: [-23.00019357 -20.83561965]
+    PED: -5.203456184713016
+    Running likelihood: -80.47574447675869
+    Posterior: 1.4638794128667493e-05
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.4671987  -7.52614978]
+      Component 1: [-8.88398095 -8.00931238]
+      Component 2: [-9.08675337 -8.30357886]
+      Component 3: [-9.05756991 -8.3290778 ]
+      Component 4: [-8.79093647 -8.02649537]
+      Component 5: [-13.16591207 -10.37954229]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4307    1.4307
+    1.4307    2.4307
+
+    Predicted goal: [-13.75492046 -11.64190323]
+    Goal variance: 3.529828
+    Predicted y: [-21.63311077 -17.90569208]
+    Data: [-23.00019357 -20.83561965]
+    PED: -4.319462738493571
+    Running likelihood: -83.82793627859509
+    Posterior: 5.124681762824937e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.74453435 -7.52614978]
+      Component 1: [-7.81568154 -8.00931238]
+      Component 2: [-7.72996734 -8.30357886]
+      Component 3: [-7.4753882 -8.3290778]
+      Component 4: [-7.04160882 -8.02649537]
+      Component 5: [-14.46984976 -10.37954229]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4307    1.4307
+    1.4307    2.4307
+
+    Predicted goal: [-14.80841621 -11.64190323]
+    Goal variance: 3.529828
+    Predicted y: [-22.2143841  -17.90569208]
+    Data: [-23.00019357 -20.83561965]
+    PED: -4.556600008543535
+    Running likelihood: -69.4050110493277
+    Posterior: 0.9407272866703609
+    Selected goal: [-20. -20.]
+
+Time step 17:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.72729666 -8.16314087]
+      Component 1: [-7.86848873 -8.80267453]
+      Component 2: [-7.859806   -9.27477135]
+      Component 3: [-7.69900887 -9.52203437]
+      Component 4: [-7.38250722 -9.49624311]
+      Component 5: [-14.80841621 -10.58840749]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4308    1.4308
+    1.4308    2.4308
+
+    Predicted goal: [-15.50857701 -10.64142637]
+    Goal variance: 3.576188
+    Predicted y: [-22.53571286 -18.75154835]
+    Data: [-24.15647742 -18.8742789 ]
+    PED: -3.2712448268748133
+    Running likelihood: -75.44101575983191
+    Posterior: 0.08595212053389996
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.21061648 -8.16314087]
+      Component 1: [-8.68284373 -8.80267453]
+      Component 2: [-8.96074484 -9.27477135]
+      Component 3: [-9.03289451 -9.52203437]
+      Component 4: [-8.89598367 -9.49624311]
+      Component 5: [-13.75492046 -10.58840749]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4308    1.4308
+    1.4308    2.4308
+
+    Predicted goal: [-14.70139393 -10.64142637]
+    Goal variance: 3.576188
+    Predicted y: [-21.96553694 -18.75154835]
+    Data: [-24.15647742 -18.8742789 ]
+    PED: -3.9293517049008155
+    Running likelihood: -84.4050961816595
+    Posterior: 1.0995270880415001e-05
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.21061648 -7.67982104]
+      Component 1: [-8.68284373 -7.98831953]
+      Component 2: [-8.96074484 -8.17383251]
+      Component 3: [-9.03289451 -8.18814872]
+      Component 4: [-8.89598367 -7.98276667]
+      Component 5: [-13.75492046 -11.64190323]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4308    1.4308
+    1.4308    2.4308
+
+    Predicted goal: [-14.70139393 -11.44860945]
+    Goal variance: 3.576188
+    Predicted y: [-21.96553694 -19.32172428]
+    Data: [-24.15647742 -18.8742789 ]
+    PED: -4.450488336165881
+    Running likelihood: -88.27842461476097
+    Posterior: 2.2858133669522942e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.72729666 -7.67982104]
+      Component 1: [-7.86848873 -7.98831953]
+      Component 2: [-7.859806   -8.17383251]
+      Component 3: [-7.69900887 -8.18814872]
+      Component 4: [-7.38250722 -7.98276667]
+      Component 5: [-14.80841621 -11.64190323]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4308    1.4308
+    1.4308    2.4308
+
+    Predicted goal: [-15.50857701 -11.44860945]
+    Goal variance: 3.576188
+    Predicted y: [-22.53571286 -19.32172428]
+    Data: [-24.15647742 -18.8742789 ]
+    PED: -3.6719244384833267
+    Running likelihood: -73.07693548781103
+    Posterior: 0.9140366556138785
+    Selected goal: [-20. -20.]
+
+Time step 18:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.84636174 -7.44397282]
+      Component 1: [-7.9811481  -8.18236348]
+      Component 2: [-7.9576817  -8.80942856]
+      Component 3: [-7.7941212  -9.26979744]
+      Component 4: [-7.5055309  -9.50738347]
+      Component 5: [-15.50857701 -10.64142637]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4309    1.4309
+    1.4309    2.4309
+
+    Predicted goal: [-15.8073228  -11.33580491]
+    Goal variance: 3.622186
+    Predicted y: [-23.35493875 -18.08539919]
+    Data: [-24.04622654 -19.69216797]
+    PED: -3.0648505008363447
+    Running likelihood: -78.50586626066826
+    Posterior: 0.06420078359992017
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-8.11540699 -7.44397282]
+      Component 1: [-8.55377145 -8.18236348]
+      Component 2: [-8.80341429 -8.80942856]
+      Component 3: [-8.8719525  -9.26979744]
+      Component 4: [-8.77135207 -9.50738347]
+      Component 5: [-14.70139393 -10.64142637]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4309    1.4309
+    1.4309    2.4309
+
+    Predicted goal: [-15.23270047 -11.33580491]
+    Goal variance: 3.622186
+    Predicted y: [-22.81680092 -18.08539919]
+    Data: [-24.04622654 -19.69216797]
+    PED: -3.069782013132167
+    Running likelihood: -87.47487819479167
+    Posterior: 8.172368435823833e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-8.11540699 -7.17492756]
+      Component 1: [-8.55377145 -7.60974013]
+      Component 2: [-8.80341429 -7.96369597]
+      Component 3: [-8.8719525  -8.19196615]
+      Component 4: [-8.77135207 -8.24156229]
+      Component 5: [-14.70139393 -11.44860945]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4309    1.4309
+    1.4309    2.4309
+
+    Predicted goal: [-15.23270047 -11.91042724]
+    Goal variance: 3.622186
+    Predicted y: [-22.81680092 -18.62353701]
+    Data: [-24.04622654 -19.69216797]
+    PED: -2.8617878699037975
+    Running likelihood: -91.14021248466476
+    Posterior: 2.091767838548868e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.84636174 -7.17492756]
+      Component 1: [-7.9811481  -7.60974013]
+      Component 2: [-7.9576817  -7.96369597]
+      Component 3: [-7.7941212  -8.19196615]
+      Component 4: [-7.5055309  -8.24156229]
+      Component 5: [-15.50857701 -11.44860945]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4309    1.4309
+    1.4309    2.4309
+
+    Predicted goal: [-15.8073228  -11.91042724]
+    Goal variance: 3.622186
+    Predicted y: [-23.35493875 -18.62353701]
+    Data: [-24.04622654 -19.69216797]
+    PED: -2.7495542046151784
+    Running likelihood: -75.82648969242621
+    Posterior: 0.9357908348548616
+    Selected goal: [-20. -20.]
+
+Time step 19:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.71163785 -7.04519938]
+      Component 1: [-7.95453131 -7.6953927 ]
+      Component 2: [-8.01908144 -8.2705324 ]
+      Component 3: [-7.92954949 -8.74404051]
+      Component 4: [-7.71146928 -9.07768855]
+      Component 5: [-15.8073228  -11.33580491]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4310    1.4310
+    1.4310    2.4310
+
+    Predicted goal: [-15.88530637 -13.12645559]
+    Goal variance: 3.666715
+    Predicted y: [-23.51896065 -18.38100429]
+    Data: [-23.69912307 -22.51787513]
+    PED: -7.633778108865499
+    Running likelihood: -86.13964436953376
+    Posterior: 0.021008353343141453
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-7.79871485 -7.04519938]
+      Component 1: [-8.30778193 -7.6953927 ]
+      Component 2: [-8.62123426 -8.2705324 ]
+      Component 3: [-8.75338236 -8.74404051]
+      Component 4: [-8.7249596  -9.07768855]
+      Component 5: [-15.23270047 -11.33580491]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4310    1.4310
+    1.4310    2.4310
+
+    Predicted goal: [-15.52171876 -13.12645559]
+    Goal variance: 3.666715
+    Predicted y: [-23.03141532 -18.38100429]
+    Data: [-23.69912307 -22.51787513]
+    PED: -7.016548999109631
+    Running likelihood: -94.4914271939013
+    Posterior: 4.957455432663194e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.79871485 -6.95812238]
+      Component 1: [-8.30778193 -7.34214208]
+      Component 2: [-8.62123426 -7.66837959]
+      Component 3: [-8.75338236 -7.92020764]
+      Component 4: [-8.7249596  -8.06419823]
+      Component 5: [-15.23270047 -11.91042724]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4310    1.4310
+    1.4310    2.4310
+
+    Predicted goal: [-15.52171876 -13.49004321]
+    Goal variance: 3.666715
+    Predicted y: [-23.03141532 -18.86854961]
+    Data: [-23.69912307 -22.51787513]
+    PED: -5.942403858428012
+    Running likelihood: -97.08261634309277
+    Posterior: 3.7146651343047187e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.71163785 -6.95812238]
+      Component 1: [-7.95453131 -7.34214208]
+      Component 2: [-8.01908144 -7.66837959]
+      Component 3: [-7.92954949 -7.92020764]
+      Component 4: [-7.71146928 -8.06419823]
+      Component 5: [-15.8073228  -11.91042724]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4310    1.4310
+    1.4310    2.4310
+
+    Predicted goal: [-15.88530637 -13.49004321]
+    Goal variance: 3.666715
+    Predicted y: [-23.51896065 -18.86854961]
+    Data: [-23.69912307 -22.51787513]
+    PED: -6.471557147306123
+    Running likelihood: -82.29804683973234
+    Posterior: 0.9789863177349073
+    Selected goal: [-20. -20.]
+
+Time step 20:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-7.31972091 -7.37234073]
+      Component 1: [-7.73970603 -7.68969798]
+      Component 2: [-7.9642924  -7.91952581]
+      Component 3: [-8.01162815 -8.09939076]
+      Component 4: [-7.90788966 -8.24668976]
+      Component 5: [-15.88530637 -13.12645559]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4317    1.4317
+    1.4317    2.4317
+
+    Predicted goal: [-15.42727195 -14.14928726]
+    Goal variance: 3.706384
+    Predicted y: [-23.20502728 -20.49879633]
+    Data: [-22.15228943 -22.84965371]
+    PED: -5.518814349274076
+    Running likelihood: -91.65845871880784
+    Posterior: 0.010177367729611884
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-7.25959568 -7.37234073]
+      Component 1: [-7.90273954 -7.68969798]
+      Component 2: [-8.34395792 -7.91952581]
+      Component 3: [-8.5936113  -8.09939076]
+      Component 4: [-8.67310793 -8.24668976]
+      Component 5: [-15.52171876 -13.12645559]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4317    1.4317
+    1.4317    2.4317
+
+    Predicted goal: [-15.24803704 -14.14928726]
+    Goal variance: 3.706384
+    Predicted y: [-22.78131444 -20.49879633]
+    Data: [-22.15228943 -22.84965371]
+    PED: -4.9254251751594165
+    Running likelihood: -99.41685236906072
+    Posterior: 4.3471829329102775e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.25959568 -7.43246596]
+      Component 1: [-7.90273954 -7.52666446]
+      Component 2: [-8.34395792 -7.53986028]
+      Component 3: [-8.5936113  -7.51740761]
+      Component 4: [-8.67310793 -7.48147149]
+      Component 5: [-15.52171876 -13.49004321]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4317    1.4317
+    1.4317    2.4317
+
+    Predicted goal: [-15.24803704 -14.32852217]
+    Goal variance: 3.706384
+    Predicted y: [-22.78131444 -20.92250917]
+    Data: [-22.15228943 -22.84965371]
+    PED: -4.256199904493613
+    Running likelihood: -101.33881624758638
+    Posterior: 6.360768784765516e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-7.31972091 -7.43246596]
+      Component 1: [-7.73970603 -7.52666446]
+      Component 2: [-7.9642924  -7.53986028]
+      Component 3: [-8.01162815 -7.51740761]
+      Component 4: [-7.90788966 -7.48147149]
+      Component 5: [-15.88530637 -13.49004321]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4317    1.4317
+    1.4317    2.4317
+
+    Predicted goal: [-15.42727195 -14.32852217]
+    Goal variance: 3.706384
+    Predicted y: [-23.20502728 -20.92250917]
+    Data: [-22.15228943 -22.84965371]
+    PED: -4.783057550788085
+    Running likelihood: -87.08110439052042
+    Posterior: 0.9898176490105697
+    Selected goal: [-20. -20.]
+
+Time step 21:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-6.43752853 -7.50794293]
+      Component 1: [-7.15793579 -7.73362132]
+      Component 2: [-7.68514121 -7.81154607]
+      Component 3: [-8.01035162 -7.81667145]
+      Component 4: [-8.14061746 -7.81134615]
+      Component 5: [-15.42727195 -14.14928726]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4346    1.4346
+    1.4346    2.4346
+
+    Predicted goal: [-16.20801522 -14.6150825 ]
+    Goal variance: 3.737327
+    Predicted y: [-21.86480048 -21.65723019]
+    Data: [-23.64352109 -22.71842357]
+    PED: -3.1642222152849038
+    Running likelihood: -94.82268093409274
+    Posterior: 0.010550567746385612
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-6.26334056 -7.50794293]
+      Component 1: [-7.16292689 -7.73362132]
+      Component 2: [-7.87013633 -7.81154607]
+      Component 3: [-8.37147893 -7.81667145]
+      Component 4: [-8.67068414 -7.81134615]
+      Component 5: [-15.24803704 -14.14928726]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4346    1.4346
+    1.4346    2.4346
+
+    Predicted goal: [-16.18391008 -14.6150825 ]
+    Goal variance: 3.737327
+    Predicted y: [-21.51137761 -21.65723019]
+    Data: [-23.64352109 -22.71842357]
+    PED: -3.4600188545525485
+    Running likelihood: -102.87687122361326
+    Posterior: 3.3526284923395767e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-6.26334056 -7.6821309 ]
+      Component 1: [-7.16292689 -7.72863021]
+      Component 2: [-7.87013633 -7.62655094]
+      Component 3: [-8.37147893 -7.45554415]
+      Component 4: [-8.67068414 -7.28127946]
+      Component 5: [-15.24803704 -14.32852217]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4346    1.4346
+    1.4346    2.4346
+
+    Predicted goal: [-16.18391008 -14.63918763]
+    Goal variance: 3.737327
+    Predicted y: [-21.51137761 -22.01065307]
+    Data: [-23.64352109 -22.71842357]
+    PED: -3.5427204803691867
+    Running likelihood: -104.88153672795556
+    Posterior: 4.51616982793018e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-6.43752853 -7.6821309 ]
+      Component 1: [-7.15793579 -7.72863021]
+      Component 2: [-7.68514121 -7.62655094]
+      Component 3: [-8.01035162 -7.45554415]
+      Component 4: [-8.14061746 -7.28127946]
+      Component 5: [-15.42727195 -14.32852217]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4346    1.4346
+    1.4346    2.4346
+
+    Predicted goal: [-16.20801522 -14.63918763]
+    Goal variance: 3.737327
+    Predicted y: [-21.86480048 -22.01065307]
+    Data: [-23.64352109 -22.71842357]
+    PED: -3.200611402292733
+    Running likelihood: -90.28171579281316
+    Posterior: 0.9894456280081415
+    Selected goal: [-20. -20.]
+
+Time step 22:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-5.98958538 -7.32851857]
+      Component 1: [-6.70490006 -7.66745809]
+      Component 2: [-7.24271229 -7.78419939]
+      Component 3: [-7.59927119 -7.76031559]
+      Component 4: [-7.78437411 -7.68185217]
+      Component 5: [-16.20801522 -14.6150825 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4408    1.4408
+    1.4408    2.4408
+
+    Predicted goal: [-15.84290324 -16.0100446 ]
+    Goal variance: 3.757277
+    Predicted y: [-22.1976006  -21.94360107]
+    Data: [-21.37432434 -25.0890448 ]
+    PED: -6.800991521334552
+    Running likelihood: -101.6236724554273
+    Posterior: 0.00569187503412539
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-5.73021964 -7.32851857]
+      Component 1: [-6.58383748 -7.66745809]
+      Component 2: [-7.26454806 -7.78419939]
+      Component 3: [-7.76720437 -7.76031559]
+      Component 4: [-8.10060082 -7.68185217]
+      Component 5: [-16.18391008 -14.6150825 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4408    1.4408
+    1.4408    2.4408
+
+    Predicted goal: [-15.94451364 -16.0100446 ]
+    Goal variance: 3.757277
+    Predicted y: [-21.91412973 -21.94360107]
+    Data: [-21.37432434 -25.0890448 ]
+    PED: -6.3485426686694755
+    Running likelihood: -109.22541389228275
+    Posterior: 2.843550841373996e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-5.73021964 -7.58788431]
+      Component 1: [-6.58383748 -7.78852067]
+      Component 2: [-7.26454806 -7.76236362]
+      Component 3: [-7.76720437 -7.59238241]
+      Component 4: [-8.10060082 -7.36562546]
+      Component 5: [-16.18391008 -14.63918763]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4408    1.4408
+    1.4408    2.4408
+
+    Predicted goal: [-15.94451364 -15.90843421]
+    Goal variance: 3.757277
+    Predicted y: [-21.91412973 -22.22707194]
+    Data: [-21.37432434 -25.0890448 ]
+    PED: -5.756330755224123
+    Running likelihood: -110.63786748317969
+    Posterior: 6.92532560374357e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-5.98958538 -7.58788431]
+      Component 1: [-6.70490006 -7.78852067]
+      Component 2: [-7.24271229 -7.76236362]
+      Component 3: [-7.59927119 -7.59238241]
+      Component 4: [-7.78437411 -7.36562546]
+      Component 5: [-16.20801522 -14.63918763]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4408    1.4408
+    1.4408    2.4408
+
+    Predicted goal: [-15.84290324 -15.90843421]
+    Goal variance: 3.757277
+    Predicted y: [-22.1976006  -22.22707194]
+    Data: [-21.37432434 -25.0890448 ]
+    PED: -6.17895280078511
+    Running likelihood: -96.46066859359827
+    Posterior: 0.9943045888824729
+    Selected goal: [-20. -20.]
+
+Time step 23:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-4.91357345 -7.48403935]
+      Component 1: [-5.86872419 -7.79028589]
+      Component 2: [-6.66983669 -7.80142267]
+      Component 3: [-7.28740435 -7.61344704]
+      Component 4: [-7.70908472 -7.34075744]
+      Component 5: [-15.84290324 -16.0100446 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4500    1.4500
+    1.4500    2.4500
+
+    Predicted goal: [-15.91986851 -16.94209262]
+    Goal variance: 3.766858
+    Predicted y: [-20.75647669 -23.49408396]
+    Data: [-20.92850316 -25.57732138]
+    PED: -3.7575879420600407
+    Running likelihood: -105.38126039748734
+    Posterior: 0.004401919943234127
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-4.59227436 -7.48403935]
+      Component 1: [-5.65097344 -7.79028589]
+      Component 2: [-6.56084714 -7.80142267]
+      Component 3: [-7.29385173 -7.61344704]
+      Component 4: [-7.83920685 -7.34075744]
+      Component 5: [-15.94451364 -16.0100446 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4500    1.4500
+    1.4500    2.4500
+
+    Predicted goal: [-16.11976843 -16.94209262]
+    Goal variance: 3.766858
+    Predicted y: [-20.536788   -23.49408396]
+    Data: [-20.92850316 -25.57732138]
+    PED: -3.62633127685662
+    Running likelihood: -112.85174516913936
+    Posterior: 2.507562846165033e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-4.59227436 -7.80533845]
+      Component 1: [-5.65097344 -8.00803664]
+      Component 2: [-6.56084714 -7.91041222]
+      Component 3: [-7.29385173 -7.60699966]
+      Component 4: [-7.83920685 -7.2106353 ]
+      Component 5: [-15.94451364 -15.90843421]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4500    1.4500
+    1.4500    2.4500
+
+    Predicted goal: [-16.11976843 -16.7421927 ]
+    Goal variance: 3.766858
+    Predicted y: [-20.536788   -23.71377265]
+    Data: [-20.92850316 -25.57732138]
+    PED: -3.3859796212457356
+    Running likelihood: -114.02384710442543
+    Posterior: 7.766304667822361e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-4.91357345 -7.80533845]
+      Component 1: [-5.86872419 -8.00803664]
+      Component 2: [-6.66983669 -7.91041222]
+      Component 3: [-7.28740435 -7.60699966]
+      Component 4: [-7.70908472 -7.2106353 ]
+      Component 5: [-15.84290324 -15.90843421]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4500    1.4500
+    1.4500    2.4500
+
+    Predicted goal: [-15.91986851 -16.7421927 ]
+    Goal variance: 3.766858
+    Predicted y: [-20.75647669 -23.71377265]
+    Data: [-20.92850316 -25.57732138]
+    PED: -3.4992922570311853
+    Running likelihood: -99.95996085062946
+    Posterior: 0.995594795863451
+    Selected goal: [-20. -20.]
+
+Time step 24:
+  Model 0 (initialized with [-20  20]):
+    Predicted state (m_pred):
+      Component 0: [-3.8904854  -7.34001362]
+      Component 1: [-4.9384202  -7.78493297]
+      Component 2: [-5.87527941 -7.86966946]
+      Component 3: [-6.65946323 -7.67580027]
+      Component 4: [-7.26327731 -7.321269  ]
+      Component 5: [-15.91986851 -16.94209262]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4605    1.4605
+    1.4605    2.4605
+
+    Predicted goal: [-16.52968106 -16.98703882]
+    Goal variance: 3.769300
+    Predicted y: [-19.8103539  -24.28210624]
+    Data: [-21.16642939 -24.38205571]
+    PED: -3.050678708760822
+    Running likelihood: -108.43193910624817
+    Posterior: 0.004777436409306334
+    Selected goal: [-20. -20.]
+  Model 1 (initialized with [20 20]):
+    Predicted state (m_pred):
+      Component 0: [-3.52429735 -7.34001362]
+      Component 1: [-4.64885197 -7.78493297]
+      Component 2: [-5.66590008 -7.86966946]
+      Component 3: [-6.53722612 -7.67580027]
+      Component 4: [-7.23891293 -7.321269  ]
+      Component 5: [-16.11976843 -16.94209262]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4605    1.4605
+    1.4605    2.4605
+
+    Predicted goal: [-16.80435896 -16.98703882]
+    Goal variance: 3.769300
+    Predicted y: [-19.64406578 -24.28210624]
+    Data: [-21.16642939 -24.38205571]
+    PED: -3.1946693001897417
+    Running likelihood: -116.04641446932911
+    Posterior: 2.356515400035432e-06
+    Selected goal: [-20. -20.]
+  Model 2 (initialized with [ 20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-3.52429735 -7.70620167]
+      Component 1: [-4.64885197 -8.0745012 ]
+      Component 2: [-5.66590008 -8.07904879]
+      Component 3: [-6.53722612 -7.79803739]
+      Component 4: [-7.23891293 -7.34563338]
+      Component 5: [-16.11976843 -16.7421927 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4605    1.4605
+    1.4605    2.4605
+
+    Predicted goal: [-16.80435896 -16.71236092]
+    Goal variance: 3.769300
+    Predicted y: [-19.64406578 -24.44839437]
+    Data: [-21.16642939 -24.38205571]
+    PED: -3.287209289517444
+    Running likelihood: -117.31105639394288
+    Posterior: 6.653394468805701e-07
+    Selected goal: [-20. -20.]
+  Model 3 (initialized with [-20 -20]):
+    Predicted state (m_pred):
+      Component 0: [-3.8904854  -7.70620167]
+      Component 1: [-4.9384202 -8.0745012]
+      Component 2: [-5.87527941 -8.07904879]
+      Component 3: [-6.65946323 -7.79803739]
+      Component 4: [-7.26327731 -7.34563338]
+      Component 5: [-15.91986851 -16.7421927 ]
+    Predicted covariance (v_pred):
+v_pred (shape (2, 2)):
+    2.4605    1.4605
+    1.4605    2.4605
+
+    Predicted goal: [-16.52968106 -16.71236092]
+    Goal variance: 3.769300
+    Predicted y: [-19.8103539  -24.44839437]
+    Data: [-21.16642939 -24.38205571]
+    PED: -3.1329189844277625
+    Running likelihood: -103.09287983505722
+    Posterior: 0.9952195417358438
+    Selected goal: [-20. -20.]
+
