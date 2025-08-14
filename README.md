@@ -56,7 +56,7 @@ Folder to save results throughout the course of this work - Contains subfolders 
 - **Remaining Folders** -- UZH Debugging runs throughout the course of the work.
 
 ### **Data**
-- **UZH** - The UZH-FPV Dataset, divided into categories by difficulty
+- **UZH** - The UZH-FPV Dataset, divided into categories by difficulty. NOTE: Only a few example plots and not the dataset itself is saved to this GitHub as the UZH-FPV trajectory files are very large. If you would like to run experiments on the UZH-FPV dataset, it is publicly accessible at https://fpv.ifi.uzh.ch/datasets/. Ground-truth files are found within their ZIP files for each trajectory. 
 - **Generated:**
   - **CSG_Bridging** -- CSG Dataset used for goal selection task
   - **CSG_TrackParamStudy** -- Dataset used to select parameters for CSG dataset generation
