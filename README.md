@@ -1,5 +1,6 @@
 # MLMI_dissertation_object_tracking
-GitHub Repository for 2025 MLMI MPhil Dissertation work - Object kinematic and intent tracking using the UZH-FPV drone racing dataset and synthetic trajectory datasets
+GitHub Repository for 2025 MLMI MPhil Dissertation "Tracking of Erratically Moving Objects Using (non)-Gaussian Process Models"
+- Object trajectory and latent intent prediction using an extended state-space model approach for a GP and integrated GP tracking model.
 
 ## Setup
 
@@ -14,7 +15,7 @@ source .venv/bin/activate
 ```
 
 ## Dependencies
-Numpy, Matplotlib, tqdm, scipy, seaborn
+Numpy, SciPy, Matplotlib, tqdm, seaborn, pandas
 
 ## Folder Descriptions
 
