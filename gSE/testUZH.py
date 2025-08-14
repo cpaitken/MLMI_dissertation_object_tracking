@@ -1,9 +1,16 @@
+## File to test the gSE model on all the UZH-FPV trajectories ##
+## Currently saves in UZH_DynamicGoal folder ##
+## Changes lines 99 and 119 to specify where to save results ##
+## Change lines 92 and 93 to test varying sigma_g or G_var ##
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 import matplotlib.pyplot as plt
 import Models.functions as f
 import Models.intentFunctions as iF
-from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot, extract_params_from_header, save_specifications_txt, save_variance_array_txt
-from tqdm import tqdm
+from dataFunctions import make_groundtruth, pretty_print_matrix, save_vector_arrays_txt, save_matrix_arrays_txt, save_state_comparison_txt, get_model_rmse, save_tracking_plot, extract_params_from_header, save_specifications_txt, save_variance_array_txt, calculate_p_value_se_gse
 import random
 np.random.seed(24)
 random.seed(24)
@@ -64,10 +71,6 @@ Easy = ["UZH_1", "UZH_2", "UZH_3", "UZH_4", "UZH_9", "UZH_10", "UZH_12"]
 Medium = ["UZH_1", "UZH_3", "UZH_5", "UZH_6", "UZH_9", "UZH_13"]
 Hard = ["UZH_5", "UZH_7", "UZH_14"]
 
-# Easy = ["UZH_3"]
-# Medium = ["UZH_1"]
-# Hard = ["UZH_5"]
-
 #Define the folders to go through
 All_categories = [Easy, Medium, Hard]
 category_names = ["Easy", "Medium", "Hard"]
@@ -86,13 +89,14 @@ ls = 30
 d = 5
 dt = 1
 sy = 1
-sigma_g = 0.5
+sigma_g = 0.0
 G_var = 10000
 initializeTrack_with_truth = True
-initializeGoal_with_truth = True
+initializeGoal_with_truth = False
 UZH = True
 show_Target = True
-run_name = "Sigma_G_0.5"
+## Change this to the name of the folder you want to save results in ##
+run_name = "TEST_FILEWORKS"
 
 ##EXPERIMENT 1: VARYING S2 and LS for G_Prior = Truth, G_var = 10000 ##
 # for s2, s2_name in zip(s2_options, s2_names):
@@ -176,7 +180,7 @@ for category, category_name in zip(All_categories, category_names):
         X_normal, S_normal, normal_F_aug, normal_predicted_means, normal_updated_means = track_SE(Tmax, s2, ls, sy, mk_normal, vk_normal, noisy_data, X_normal, S_normal, normal_F_aug, normal_predicted_means, normal_updated_means)
         X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means = track_GSE(Tmax, s2, ls, sy, mk_goal, vk_goal, noisy_data, X_goal, S_goal, G_goal, S_goal_var, goal_F_aug, goal_predicted_means, goal_updated_means, sigma_g)
 
-        save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, "g-SE Track", "ComparisonPlot.png", debugging_folder, show_Target=True, true_goal=G_prior, false_goals=None)
+        save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, "g-SE Track", "ComparisonPlot.png", debugging_folder, show_Target=False, true_goal=G_prior, false_goals=None, XN=X_normal, modelName2="SE Track", predicted_endpoint=G_goal[-1,:])
         save_matrix_arrays_txt(normal_F_aug[:5], goal_F_aug[:5], "transitionMatrices.txt", "F_aug", "F_goal", debugging_folder)
         save_vector_arrays_txt(normal_predicted_means, goal_predicted_means, "predictedMeans.txt", "m_predN", "m_pred", debugging_folder)
         save_vector_arrays_txt(normal_updated_means, goal_updated_means, "updatedMeans.txt", "m_updN", "m_upd", debugging_folder)
@@ -186,9 +190,11 @@ for category, category_name in zip(All_categories, category_names):
 
         se_rmse = get_model_rmse(X_normal, groundtruth)
         gse_rmse = get_model_rmse(X_goal, groundtruth)
+        p_val_se_gse = calculate_p_value_se_gse(X_normal, X_goal, groundtruth)
         performance_params = {
             "SE_RMSE": float(se_rmse),
-            "GSE_RMSE": float(gse_rmse)
+            "GSE_RMSE": float(gse_rmse),
+            "P_val": float(p_val_se_gse["t_p_value"])
         }
 
         all_params = {

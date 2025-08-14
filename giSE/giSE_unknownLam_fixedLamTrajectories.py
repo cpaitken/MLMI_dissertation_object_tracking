@@ -1,7 +1,6 @@
-## Continuation of Particle Filter Implementation ##
-## Same Measurement Model with the assumption lambda is fixed 
-## but unknown. Testing on trajectories within constantLambda/Tmax100
-## Goal is to outperform when lambda is known and/or determine correct lambda
+## File to test the g-iSE model on goal-converging trajectories but with estimating lambda using RBPF ##
+## Runs for one initialisation combination at a time (Must be specified in lines 35 and 36, with the results folder specified in line 28 ##
+## Currently runs for False Goal and False Lambda ##
 
 ######################################
 ## Imports ##
@@ -289,7 +288,7 @@ for subfolder in groundtruth_folder_path.iterdir():
 
             save_vector_array_txt(X_goal, "predicted_loc.txt", "X_goal", run_specific_folder)
             save_vector_array_txt(G_goal, "predicted_goal.txt", "G_goal", run_specific_folder)
-            save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, "giSE-PF", "giSE_varyingLambda_debug.png", run_specific_folder, show_Target=True, true_goal=true_goal)
+            save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, "g-iSE", "giSE_varyingLambda_debug.png", run_specific_folder, show_Target=True, true_goal=true_goal, false_goals=None, XN=None, modelName2=None, predicted_endpoint=G_goal[-1,:])
 
         ######################################
         ## Save overall RMSE for entire generating lambda ##

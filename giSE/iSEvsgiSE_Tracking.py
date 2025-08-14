@@ -1,3 +1,8 @@
+## File to compare the iSE and g-iSE model on a single trajectory ##
+## Uses the basic measurement model, resulting in the same trajectory for both models ##
+## Saves results in Debugging/iSE/BasicMeasurementModel/Simple_iSE_Track ##
+## Section 3.2 and Figure 3.1 ##
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

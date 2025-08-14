@@ -1,3 +1,8 @@
+## File to originally calculate RMSE for runs of the gSE models for hyperparameter testing##
+## Uncommented portion now to determine convergence statistics for the gSE model on CSG and Quadrant Trajectories ##
+
+
+
 from dataFunctions import print_rmse_summary, analyze_convergence_by_parameters, save_convergence_matrices_to_txt
 import numpy as np
 

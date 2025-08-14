@@ -1,3 +1,6 @@
+## File to store functions used for data analysis and the saving of results ##
+## Functions that require parsing through directory structures were written with the help of ChatGPT ##
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +33,8 @@ __all__ = [
     "find_convergence_time",
     "print_convergence_summary",
     "analyze_convergence_by_parameters",
-    "save_convergence_matrices_to_txt"
+    "save_convergence_matrices_to_txt",
+    "calculate_p_value_se_gse"
 ]
 
 def make_groundtruth(filename, UZH=False):
@@ -77,9 +81,6 @@ def pretty_print_matrix(matrix, name, file):
     file.write("\n")
 
 def save_vector_arrays_txt(arr1, arr2, filename, label1, label2, folder="Debugging"):
-    """
-    Save two arrays of vectors (shape: (N, d)) to a txt file in Debugging/ with readable formatting.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -96,9 +97,6 @@ def save_vector_arrays_txt(arr1, arr2, filename, label1, label2, folder="Debuggi
             f.write("\n" + "="*50 + "\n\n")
 
 def save_matrix_arrays_txt(arr1, arr2, filename, label1, label2, folder="Debugging"):
-    """
-    Save two arrays of matrices (shape: (N, d, d)) to a txt file in Debugging/ with readable formatting, using pretty_print_matrix for each matrix.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -109,9 +107,6 @@ def save_matrix_arrays_txt(arr1, arr2, filename, label1, label2, folder="Debuggi
             f.write("\n" + "="*50 + "\n\n")
 
 def save_state_comparison_txt(full_state_iSE, full_state_goal, filename, folder="Debugging"):
-    """
-    Save a detailed state comparison between iSE and goal model state arrays to Debugging/filename.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -160,10 +155,7 @@ def color_line(x, y, cmap='cubehelix', linewidth=2, alpha=1.0, label=None):
     if label:
         plt.plot([], [], color=plt.get_cmap(cmap)(0.5), label=label)
 
-def save_tracking_plot(groundtruth, noisy_data, X, G, modelName1, filename, folder="Debugging", show_Target=False, true_goal=np.array([0,0]), false_goals=None, XN=None, modelName2=None):
-    """
-    Plot and save the tracking results to Debugging/Plots/filename (PNG).
-    """
+def save_tracking_plot(groundtruth, noisy_data, X, G, modelName1, filename, folder="Debugging", show_Target=False, true_goal=np.array([0,0]), false_goals=None, XN=None, modelName2=None, predicted_endpoint=None):
     os.makedirs(os.path.join(folder), exist_ok=True)
     plt.figure()
     gt_x_smooth, gt_y_smooth = smooth_line(groundtruth[:,0], groundtruth[:,1])
@@ -182,6 +174,13 @@ def save_tracking_plot(groundtruth, noisy_data, X, G, modelName1, filename, fold
         end_x, end_y = true_goal[0], true_goal[1]
         square = patches.Rectangle((end_x - 2.5, end_y - 2.5), 5, 5, linewidth=0, edgecolor=None, facecolor='green', alpha=0.2, zorder=2)
         plt.gca().add_patch(square)
+        plt.plot(true_goal[0], true_goal[1], label="True Endpoint",color='limegreen', marker='x', markersize=10, markeredgewidth=2)
+    
+    # Add predicted endpoint marker if provided
+    if predicted_endpoint is not None:
+        true_x, true_y = groundtruth[-1,0], groundtruth[-1,1]
+        #plt.plot(true_x, true_y, 'rx', markersize=8, markeredgewidth=2, label='True Endpoint')
+        plt.plot(predicted_endpoint[0], predicted_endpoint[1], 'rx', markersize=10, markeredgewidth=2, label='Final Inferred Goal')
     
     # Draw red squares around false goal options
     if false_goals is not None:
@@ -192,29 +191,36 @@ def save_tracking_plot(groundtruth, noisy_data, X, G, modelName1, filename, fold
     
     plt.xlabel('x (m)', fontweight='bold')
     plt.ylabel('y (m)', fontweight='bold')
-    plt.legend(fontsize=12)
+    plt.legend(fontsize=12, loc='lower left')
     plt.savefig(os.path.join(folder, filename), bbox_inches='tight')
     plt.close()
 
-def save_trajectory_plot(trajectory, filename, folder="Debugging", true_goal=None):
+def save_trajectory_plot(trajectory, filename, folder="Debugging", true_goal=None, show_start_end=True):
     os.makedirs(os.path.join(folder), exist_ok=True)
     plt.figure()
-    plt.plot(trajectory[:,0], trajectory[:,1])
+    plt.plot(trajectory[:,0], trajectory[:,1], label='Trajectory')
+    
+    # Add start and end points if requested
+    if show_start_end:
+        # Add start point (green square)
+        plt.plot(trajectory[0,0], trajectory[0,1], 'gs', markersize=8, label='Start point')
+        
+        # Add end point (red x)
+        plt.plot(trajectory[-1,0], trajectory[-1,1], 'rx', markersize=8, label='Endpoint')
+    
     plt.xlabel('x')
     plt.ylabel('y')
     
     # Add green point for goal location if provided
     if true_goal is not None:
         plt.plot(true_goal[0], true_goal[1], 'go', markersize=10, label='Goal')
-        plt.legend()
     
+    plt.legend(loc='lower left')
+    #plt.grid(True, alpha=0.3)
     plt.savefig(os.path.join(folder, filename), bbox_inches='tight')
     plt.close()
 
 def save_vector_array_txt(arr, filename, label, folder="Debugging"):
-    """
-    Save a single array of vectors (shape: (N, d)) to a txt file in Debugging/ with readable formatting.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -228,9 +234,6 @@ def save_vector_array_txt(arr, filename, label, folder="Debugging"):
 
 
 def save_matrix_array_txt(arr, filename, label, folder="Debugging"):
-    """
-    Save a single array of matrices (shape: (N, d, d)) to a txt file in Debugging/ with readable formatting.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -241,9 +244,6 @@ def save_matrix_array_txt(arr, filename, label, folder="Debugging"):
 
 
 def save_state_array_txt(state_array, filename, label, folder="Debugging"):
-    """
-    Save a detailed state array (shape: (N, d, 2)) to Debugging/filename for a single model.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -258,9 +258,6 @@ def save_state_array_txt(state_array, filename, label, folder="Debugging"):
             f.write("\n" + "="*50 + "\n\n")
 
 def save_lambda_values_txt(lambda_values, filename, folder="Debugging"):
-    """
-    Save a lambda values array to a txt file in the specified folder with readable formatting.
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     with open(path, 'w') as f:
@@ -268,13 +265,6 @@ def save_lambda_values_txt(lambda_values, filename, folder="Debugging"):
             f.write(f"Lambda value at time {i}: {lambda_values[i]}\n")
 
 def save_specifications_txt(folder, params, extra_info=None):
-    """
-    Save a specifications.txt file in the specified folder with parameters from a dictionary.
-    Parameters:
-        folder (str): The folder to save the file in.
-        params (dict): Dictionary of parameters to save (key-value pairs).
-        extra_info (dict, optional): Any extra info to include (key-value pairs).
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, "specifications.txt")
     with open(path, 'w') as f:
@@ -285,13 +275,6 @@ def save_specifications_txt(folder, params, extra_info=None):
                 f.write(f"{key}: {value}\n")
 
 def save_variance_array_txt(variances, filename, folder="Debugging"):
-    """
-    Save an array of variances (1D or 2D) to a txt file in the specified folder with readable formatting.
-    Parameters:
-        variances (np.ndarray or list): Array of variances, shape (N,) or (N, d)
-        filename (str): Name of the file to save.
-        folder (str): Folder to save the file in (default: 'Debugging').
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     variances = np.array(variances)
@@ -305,12 +288,6 @@ def save_variance_array_txt(variances, filename, folder="Debugging"):
                 f.write(f"Step {k}: {variances[k]}\n")
 
 def print_rmse_summary(baseline_folder):
-    """
-    Scans all subfolders (Easy, Medium, Hard) in the given baseline_folder, reads each specifications.txt,
-    and prints the average and std dev of SE_RMSE and GSE_RMSE for each category, as well as the average and std dev
-    of the percentage improvement of GSE_RMSE over SE_RMSE for each category.
-    Also prints the overall statistics across all categories.
-    """
     overall_se_rmses = []
     overall_gse_rmses = []
     overall_improvements = []
@@ -361,14 +338,6 @@ def print_rmse_summary(baseline_folder):
         print("No valid results found in any category.")
 
 def save_particles_txt(particles, filename, folder="Debugging"):
-    """
-    Save all particles at each timestep to a txt file in a readable format.
-    
-    Parameters:
-        particles: np.ndarray of shape (num_timesteps, num_particles, state_dim) or (num_timesteps, num_particles, d, 2)
-        filename: str, name of the file to save
-        folder: str, folder to save the file in (default: 'Debugging')
-    """
     import os
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
@@ -381,15 +350,6 @@ def save_particles_txt(particles, filename, folder="Debugging"):
             f.write("\n" + "="*50 + "\n\n")
 
 def extract_rmse_by_parameters(base_folder):
-    """
-    Extracts RMSE data from specifications.txt files, organized by s2 and ls parameters.
-    
-    Parameters:
-        base_folder (str): Path to the folder containing experiment results
-        
-    Returns:
-        dict: Dictionary with structure {(s2, ls): {'SE_RMSE': [...], 'GSE_RMSE': [...]}}
-    """
     import os
     import ast
     import numpy as np
@@ -451,15 +411,6 @@ def extract_rmse_by_parameters(base_folder):
     return results_by_params
 
 def calculate_rmse_statistics_by_parameters(base_folder):
-    """
-    Calculates mean and std dev of RMSE for each s2, ls parameter combination.
-    
-    Parameters:
-        base_folder (str): Path to the folder containing experiment results
-        
-    Returns:
-        dict: Dictionary with statistics for each parameter combination
-    """
     results_by_params = extract_rmse_by_parameters(base_folder)
     
     statistics = {}
@@ -498,12 +449,6 @@ def calculate_rmse_statistics_by_parameters(base_folder):
     return statistics
 
 def print_rmse_statistics_by_parameters(base_folder):
-    """
-    Prints RMSE statistics organized by s2 and ls parameters.
-    
-    Parameters:
-        base_folder (str): Path to the folder containing experiment results
-    """
     statistics = calculate_rmse_statistics_by_parameters(base_folder)
     
     if not statistics:
@@ -543,15 +488,6 @@ def print_rmse_statistics_by_parameters(base_folder):
 # Example usage:
 # print_rmse_statistics_by_parameters("Debugging/gSE_Params/s2Ls")
 def get_rmse_data_for_visualization(base_folder):
-    """
-    Returns RMSE data organized for visualization (heatmaps, etc.).
-    
-    Parameters:
-        base_folder (str): Path to the folder containing experiment results
-        
-    Returns:
-        tuple: (s2_values, ls_values, se_rmse_matrix, gse_rmse_matrix, improvement_matrix)
-    """
     statistics = calculate_rmse_statistics_by_parameters(base_folder)
     
     if not statistics:
@@ -583,14 +519,6 @@ def get_rmse_data_for_visualization(base_folder):
     return s2_values, ls_values, se_rmse_matrix, gse_rmse_matrix, improvement_matrix
 
 def save_rmse_to_txt(rmse_dict, filename, folder="Debugging"):
-    """
-    Save RMSE values from a dictionary to a text file.
-    
-    Parameters:
-        rmse_dict (dict): Dictionary with model names as keys and RMSE values as values
-        filename (str): Name of the output file
-        folder (str): Folder to save the file in (default: 'Debugging')
-    """
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, filename)
     
@@ -613,17 +541,6 @@ def save_rmse_to_txt(rmse_dict, filename, folder="Debugging"):
     print(f"RMSE values saved to {path}")
 
 def find_convergence_time(base_folder, target_index, min_consecutive_steps=5):
-    """
-    Find the time step when goal predictions converge and stay at a specific index.
-    
-    Parameters:
-        base_folder (str): Root folder to search (e.g., "Debugging/SE_MultTargets")
-        target_index (int): The goal index to look for (0, 1, 2, or 3)
-        min_consecutive_steps (int): Minimum number of consecutive steps at target_index to consider converged
-        
-    Returns:
-        dict: Dictionary with folder paths as keys and convergence info as values
-    """
     import os
     import numpy as np
     
@@ -676,14 +593,6 @@ def find_convergence_time(base_folder, target_index, min_consecutive_steps=5):
     return results
 
 def print_convergence_summary(base_folder, target_index, min_consecutive_steps=5):
-    """
-    Print a summary of convergence times for a specific target index.
-    
-    Parameters:
-        base_folder (str): Root folder to search
-        target_index (int): The goal index to look for
-        min_convergence_steps (int): Minimum consecutive steps to consider converged
-    """
     results = find_convergence_time(base_folder, target_index, min_consecutive_steps)
     
     if not results:
@@ -855,23 +764,36 @@ def analyze_convergence_by_parameters(base_folder, map_goal_idx, sigma_options, 
                      # Check if it converged (steps < Tmax) or didn't converge (steps == Tmax)
                      if steps_value is not None and percentage_value is not None:
                          if steps_value < Tmax:
+                            print("converged")
                              # Converged case - add to statistics
-                             convergence_data[dict_key]['steps'].append(steps_value)
-                             convergence_data[dict_key]['percentage'].append(percentage_value)
-                             if rmse_value is not None:
-                                 convergence_data[dict_key]['rmse_values'].append(rmse_value)
-                             if posterior_rmse_value is not None:
-                                 convergence_data[dict_key]['posterior_rmse_values'].append(posterior_rmse_value)
-                             if time_value is not None:
-                                 convergence_data[dict_key]['time_taken'].append(time_value)
-                             if separate_tracking:
-                                 if tracking_rmse_value is not None:
-                                     convergence_data[dict_key]['tracking_rmse_values'].append(tracking_rmse_value)
+                            #  convergence_data[dict_key]['steps'].append(steps_value)
+                            #  convergence_data[dict_key]['percentage'].append(percentage_value)
+                            #  if rmse_value is not None:
+                            #      convergence_data[dict_key]['rmse_values'].append(rmse_value)
+                            #  if posterior_rmse_value is not None:
+                            #      convergence_data[dict_key]['posterior_rmse_values'].append(posterior_rmse_value)
+                            #  if time_value is not None:
+                            #      convergence_data[dict_key]['time_taken'].append(time_value)
+                            #  if separate_tracking:
+                            #      if tracking_rmse_value is not None:
+                            #          convergence_data[dict_key]['tracking_rmse_values'].append(tracking_rmse_value)
                          else:
                              # Non-converging case - just count it
                              convergence_data[dict_key]['non_converging'] += 1
-                             if rmse_value is not None:
-                                 convergence_data[dict_key]['rmse_values'].append(rmse_value)
+                             #if rmse_value is not None:
+                             #    convergence_data[dict_key]['rmse_values'].append(rmse_value)
+
+                         convergence_data[dict_key]['steps'].append(steps_value)
+                         convergence_data[dict_key]['percentage'].append(percentage_value)
+                         if rmse_value is not None:
+                             convergence_data[dict_key]['rmse_values'].append(rmse_value)
+                         if posterior_rmse_value is not None:
+                             convergence_data[dict_key]['posterior_rmse_values'].append(posterior_rmse_value)
+                         if time_value is not None:
+                             convergence_data[dict_key]['time_taken'].append(time_value)
+                         if separate_tracking:
+                             if tracking_rmse_value is not None:
+                                 convergence_data[dict_key]['tracking_rmse_values'].append(tracking_rmse_value)
     
     # Calculate statistics for each parameter combination
     results = {}
@@ -890,15 +812,17 @@ def analyze_convergence_by_parameters(base_folder, map_goal_idx, sigma_options, 
                 results[dict_key] = {
                     'steps_mean': np.mean(steps_list),
                     'steps_std': np.std(steps_list),
+                    'steps_mean_percent': (np.mean(steps_list)/Tmax)*100,
+                    'steps_std_percent': (np.std(steps_list)/Tmax)*100,
                     'percentage_mean': np.mean(percentage_list),
                     'percentage_std': np.std(percentage_list),
                     'rmse_mean': np.mean(rmse_list) if rmse_list else 0,
                     'rmse_std': np.std(rmse_list) if rmse_list else 0,
                     'posterior_rmse_mean': np.mean(posterior_rmse_list) if posterior_rmse_list else 0,
                     'posterior_rmse_std': np.std(posterior_rmse_list) if posterior_rmse_list else 0,
-                    'num_converged': len(steps_list),
+                    'num_converged': len(steps_list)-non_converging_count,
                     'num_non_converging': non_converging_count,
-                    'total_samples': len(steps_list) + non_converging_count,
+                    'total_samples': len(steps_list),
                     'time_mean': np.mean(time_list) if time_list else 0,
                     'time_std': np.std(time_list) if time_list else 0,
                     'tracking_rmse_mean': np.mean(tracking_rmse_list) if tracking_rmse_list else 0,
@@ -908,15 +832,17 @@ def analyze_convergence_by_parameters(base_folder, map_goal_idx, sigma_options, 
                 results[dict_key] = {
                     'steps_mean': np.mean(steps_list),
                     'steps_std': np.std(steps_list),
+                    'steps_mean_percent': (np.mean(steps_list)/Tmax)*100,
+                    'steps_std_percent': (np.std(steps_list)/Tmax)*100,
                     'percentage_mean': np.mean(percentage_list),
                     'percentage_std': np.std(percentage_list),
                     'rmse_mean': np.mean(rmse_list) if rmse_list else 0,
                     'rmse_std': np.std(rmse_list) if rmse_list else 0,
                     'posterior_rmse_mean': np.mean(posterior_rmse_list) if posterior_rmse_list else 0,
                     'posterior_rmse_std': np.std(posterior_rmse_list) if posterior_rmse_list else 0,
-                    'num_converged': len(steps_list),
+                    'num_converged': len(steps_list)-non_converging_count,
                     'num_non_converging': non_converging_count,
-                    'total_samples': len(steps_list) + non_converging_count,
+                    'total_samples': len(steps_list),
                     'time_mean': np.mean(time_list) if time_list else 0,
                     'time_std': np.std(time_list) if time_list else 0
                 }
@@ -924,6 +850,8 @@ def analyze_convergence_by_parameters(base_folder, map_goal_idx, sigma_options, 
             results[dict_key] = {
                 'steps_mean': 0,
                 'steps_std': 0,
+                'steps_mean_percent': 0,
+                'steps_std_percent': 0,
                 'percentage_mean': 0,
                 'percentage_std': 0,
                 'rmse_mean': np.mean(rmse_list) if rmse_list else 0,
@@ -940,6 +868,42 @@ def analyze_convergence_by_parameters(base_folder, map_goal_idx, sigma_options, 
             }
     
     return results
+
+def calculate_p_value_se_gse(X_normal, X_goal, groundtruth):
+    from scipy import stats
+    
+    # Ensure all arrays have the same length
+    min_length = min(len(X_normal), len(X_goal), len(groundtruth))
+    X_normal = X_normal[:min_length]
+    X_goal = X_goal[:min_length]
+    groundtruth = groundtruth[:min_length]
+    
+    # Calculate errors for each model (Euclidean distance)
+    se_errors = np.linalg.norm(X_normal - groundtruth, axis=1)
+    gise_errors = np.linalg.norm(X_goal - groundtruth, axis=1)
+    
+    # Calculate differences in errors
+    error_differences = se_errors - gise_errors
+    
+    # Perform paired t-test
+    t_stat, t_p_value = stats.ttest_rel(se_errors, gise_errors)
+    
+    # Perform Wilcoxon signed-rank test (non-parametric)
+    w_stat, w_p_value = stats.wilcoxon(se_errors, gise_errors)
+    
+    return {
+        'se_errors': se_errors,
+        'gise_errors': gise_errors,
+        'error_differences': error_differences,
+        't_statistic': t_stat,
+        't_p_value': t_p_value,
+        'wilcoxon_statistic': w_stat,
+        'wilcoxon_p_value': w_p_value,
+        'mean_se_error': np.mean(se_errors),
+        'mean_gise_error': np.mean(gise_errors),
+        'std_se_error': np.std(se_errors),
+        'std_gise_error': np.std(gise_errors)
+    }
 
 def save_convergence_matrices_to_txt(convergence_results, filename="convergence_statistics.txt", folder="Debugging", separate_tracking=False):
     os.makedirs(folder, exist_ok=True)
@@ -959,6 +923,7 @@ def save_convergence_matrices_to_txt(convergence_results, filename="convergence_
             f.write(f"Parameters: sigma_g={sigma}, G_var={gvar}\n")
             f.write("-" * 50 + "\n")
             f.write(f"Steps to convergence: {stats['steps_mean']:.2f} ± {stats['steps_std']:.2f}\n")
+            f.write(f"Steps to convergence (percent of Tmax): {stats['steps_mean_percent']:.2f} ± {stats['steps_std_percent']:.2f}\n")
             f.write(f"Percentage in correct goal state: {stats['percentage_mean']:.2f}% ± {stats['percentage_std']:.2f}%\n")
             f.write(f"Mean RMSE: {stats['rmse_mean']:.6f} ± {stats['rmse_std']:.6f}\n")
             f.write(f"Mean Posterior Weighted RMSE: {stats['posterior_rmse_mean']:.6f} ± {stats['posterior_rmse_std']:.6f}\n")

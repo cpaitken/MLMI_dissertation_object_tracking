@@ -1,3 +1,8 @@
+##File to test the g-iSE model on goal-converging trajectories (one lambda_gen value dataset and initialisation combination at a time) ##
+## Change lambda_gen dataset used in line 18 ##
+## Change initialisation combinations in lines 28 and 29 ##
+## Currently runs for lambda_gen = 0.05, initialisation with true goal and lambda ##
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,21 +15,21 @@ import random
 random.seed(24)
 np.random.seed(24)
 
-
-groundtruth_folder = "Data/Generated/giSE_convergingMeasModel/oneFile_debug"
-debugging_folder = "Debugging/conv_iSE/basic_debugging/knownLambda_detailDebug/FalseGoal_FalseLambda"
+lamVal=0.05
+groundtruth_folder = f"Data/Generated/giSE_convergingMeasModel/constantLambda/Tmax100/lambda_{lamVal}"
+debugging_folder = f"Debugging/conv_iSE/constantLambda/Tmax_100_FINAL/lambda_{lamVal}/FalseGoal_TrueLambda"
 true_goal = np.array([50.0, 50.0])
 false_goal = np.array([25.0, 25.0])
-true_lambda = 0.05
+true_lambda = lamVal
 false_lambda = true_lambda + 0.01
 
 ################################
 ## Choices to make ##
-initialize_goal_with_truth = False
-initialize_lambda_with_truth = False
+initialize_goal_with_truth = True
+initialize_lambda_with_truth = True
 
-sigma_g_options = [0, 0.01, 0.5, 1, 5]
-G_var_options = [0, 10]
+sigma_g_options = [0, 2.5, 5, 10, 20, 30]
+G_var_options = [0, 50, 100]
 ################################
 
 

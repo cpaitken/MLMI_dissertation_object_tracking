@@ -1,6 +1,5 @@
-"""
-Script to parse posteriors files and create a dictionary of posteriors over time
-"""
+## File to plot posteriors over time for goal selection task in gSE Model ##
+## Figure 4.10 b ##
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,16 +12,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 plt.rcParams.update({'font.size': 15})
 
-
-
 def parse_posteriors_file(filename):
-    """
-    Parse the posteriors file and create a dictionary where:
-    - keys are goal names in the form "[value value]" (cleaned of extra spaces)
-    - values are arrays of length Tmax with posteriors at each time step
-    
-    Returns: dictionary with goal names as keys and posterior arrays as values
-    """
     posteriors = {}
     time_steps = []
     
@@ -78,6 +68,8 @@ def plot_posteriors(posteriors, Tmax):
     plt.show()
 
 def main():
+    ##Change this to the file you wish to plot ##
+    ##Currently plotting Fig 4.10 b ##
     filename = "Debugging/SE_MultTargets/CSG_PED/1_[35 90]_S2:100/SG:0.2/Gvar:10/posteriors.txt"
     posteriors, Tmax = parse_posteriors_file(filename)
 

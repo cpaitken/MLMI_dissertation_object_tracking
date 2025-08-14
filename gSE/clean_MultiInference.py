@@ -1,3 +1,6 @@
+## Initial file to test the goal selection task and debug for the gSE model ##
+## Not used to produce results reported in the paper ##
+
 import numpy as np
 import os
 import matplotlib.pyplot as plt

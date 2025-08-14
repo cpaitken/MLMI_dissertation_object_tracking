@@ -1,8 +1,5 @@
-## Basic Particle Filter Implementation ##
-
-## Currently just used to make sure the PF works and has been tested
-## on a few trajectories with fixed but unknown lambda to see if 
-## performance is okay
+## Initial file to test estimating the lambda value using RBPF ##
+## Not used for any results reported in the paper ##
 
 ######################################
 ## Imports ##

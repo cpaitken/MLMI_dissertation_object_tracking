@@ -1,5 +1,12 @@
+## File to implement goal selection task on either CSG or Quadrant datasets for gSE model ##
+## Change the trajectory dataset used in line 18 (true for CSG, false for Quadrant) ##
+## Change line 21 to implement separate state sets for tracking and goal prediction (Section 4.2.5) ##
+## Currently runs for CSG dataset with separate tracking enabled -- saves in Debugging/SE_MultTargets/CSG_PED ##
+
 import numpy as np
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import matplotlib.pyplot as plt
 import Models.functions as f
 import Models.intentFunctions as iF
@@ -179,6 +186,7 @@ for subfolder in os.listdir(groundtruth_folder):
             predicted_states_used = {}
             predicted_covars_used = {}
             ##END OF DEBUG OBJECT##
+            
 
             for i, goal_option in enumerate(goal_options):
                 name = f"goal_{i}"

@@ -1,3 +1,6 @@
+## File to plot RMSE and distance to goal for g-iSE model on the goal-convering trajectories ##
+## Figures 4.14 and 4.15 ##
+
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 14})
 import numpy as np
@@ -5,11 +8,9 @@ import re
 import os
 
 def parse_results_file(file_path):
-    """Parse the final_results.txt file and extract RMSE and distance to goal data."""
     with open(file_path, 'r') as f:
         content = f.read()
-    
-    print(f"Total content length: {len(content)}")
+
     
     # Initialize dictionaries for each G-var
     data = {}
@@ -19,41 +20,40 @@ def parse_results_file(file_path):
     pattern = r'SG:([\d.]+)_GV:(\d+):(.*?)(?=SG:[\d.]+_GV:\d+:|$)'
     matches = re.findall(pattern, content, re.DOTALL)
     
-    print(f"Found {len(matches)} parameter combinations")
+
     
     for i, (sg_str, gv_str, section_content) in enumerate(matches):
-        print(f"\n--- Processing combination {i+1} ---")
+
         
         sg = float(sg_str)
         gv = int(gv_str)
-        print(f"SG: {sg}, GV: {gv}")
-        print("Section content length:", len(section_content))
+
         
         # Extract Overall RMSE
         rmse_match = re.search(r'Overall RMSE: ([\d.]+)', section_content)
         if rmse_match:
             rmse = float(rmse_match.group(1))
-            print("RMSE:", rmse)
+            #print("RMSE:", rmse)
         else:
-            print("no rmse found")
+            #print("no rmse found")
             continue
             
         # Extract Change to Normal RMSE
         normal_rmse_match = re.search(r'Change to Normal RMSE: ([\d.]+)', section_content)
         if normal_rmse_match:
             normal_rmse = float(normal_rmse_match.group(1))
-            print("Normal RMSE:", normal_rmse)
+            #print("Normal RMSE:", normal_rmse)
         else:
-            print("no normal rmse found")
+            #print("no normal rmse found")
             normal_rmse = None
             
         # Extract Distance to Goal
         dist_match = re.search(r'Distance to Goal: ([\d.]+)', section_content)
         if dist_match:
             distance = float(dist_match.group(1))
-            print("Distance:", distance)
+            #print("Distance:", distance)
         else:
-            print("no distance found")
+            #print("no distance found")
             continue
             
         # Store data grouped by G-var, with sigma_g as key
@@ -61,16 +61,14 @@ def parse_results_file(file_path):
             data[gv] = {}
         
         data[gv][sg] = {'rmse': rmse, 'distance': distance, 'normal_rmse': normal_rmse}
-        print(f"Added data for SG:{sg}, GV:{gv}")
-    
-    print(f"\nFinal data structure:")
-    for gv in sorted(data.keys()):
-        print(f"G-var {gv}: {len(data[gv])} entries")
+
+
+    #for gv in sorted(data.keys()):
+        #print(f"G-var {gv}: {len(data[gv])} entries")
     
     return data
 
-def create_plots(data, output_path=None, show_legend=False):
-    """Create plots for each G-var group showing RMSE and distance to goal vs sigma_g."""
+def create_plots(data, output_path=None, show_legend=False, legend_loc='upper left'):
     
     # Sort G-var values for consistent plotting order and filter to include 0, 10, and 50
     gv_values = sorted([gv for gv in data.keys() if gv in [0, 10, 50]])
@@ -100,12 +98,12 @@ def create_plots(data, output_path=None, show_legend=False):
             ax.set_ylabel('RMSE', color=color1, fontsize=14, fontweight='bold')
         else:
             ax.set_ylabel('', color=color1)
-        line1 = ax.plot(sg_values, rmse_values, 'o-', color=color1, label='Overall RMSE', linewidth=2, markersize=6)
+        line1 = ax.plot(sg_values, rmse_values, 'o-', color=color1, label='Overall RMSE', linewidth=2, markersize=6, zorder=1)
         ax.tick_params(axis='y', labelcolor=color1)
         
         # Add Normal RMSE line if available
         if normal_rmse_values and len(normal_rmse_values) == len(sg_values):
-            line3 = ax.plot(sg_values, normal_rmse_values, '--', color='tab:green', label='Normal RMSE', linewidth=2)
+            line3 = ax.plot(sg_values, normal_rmse_values, '--', color='tab:green', label='Normal RMSE', linewidth=2, zorder=1)
             lines = line1 + line3
         else:
             lines = line1
@@ -118,20 +116,24 @@ def create_plots(data, output_path=None, show_legend=False):
             ax2.set_ylabel('Distance to Goal (m)', color=color2, fontsize=14, fontweight='bold')
         else:
             ax2.set_ylabel('', color=color2)
-        line2 = ax2.plot(sg_values, distance_values, 's-', color=color2, label='Distance to Goal', linewidth=2, markersize=6)
+        line2 = ax2.plot(sg_values, distance_values, 's-', color=color2, label='Distance to Goal', linewidth=2, markersize=6, zorder=1)
         ax2.tick_params(axis='y', labelcolor=color2)
+        
+        # Force the secondary axis to use the same zorder as the primary axis
+        ax2.set_zorder(ax.get_zorder())
         
         # Add title
         ax.set_title(f'Goal Initialisation Variance = {gv}', fontsize=15, fontweight='bold')
         
         # Add grid
-        ax.grid(True, alpha=0.3)
+        ax.grid(True, alpha=0.3, zorder=0)
         
         # Add legend only if show_legend is True
         if show_legend:
             lines = lines + line2
             labels = [l.get_label() for l in lines]
-            ax.legend(lines, labels, loc='upper left', fontsize=12)
+            legend = ax.legend(lines, labels, loc=legend_loc, fontsize=12, framealpha=0.7)
+            legend.set_zorder(10)  # Put legend well above everything
     
     plt.tight_layout(w_pad=2.0, h_pad=0.5)
     
@@ -144,22 +146,26 @@ def create_plots(data, output_path=None, show_legend=False):
 def main():
     # Path to the results file
 
-    #lambda_options = ["0.01", "0.02", "0.03", "0.05"]
+    lambda_options = ["0.01", "0.02", "0.03", "0.05"]
     file_options = ["TrueGoal_TrueLambda", "TrueGoal_FalseLambda", "FalseGoal_TrueLambda", "FalseGoal_FalseLambda"]
-    lambda_options = ["0.05"]
+    #lambda_options = ["0.05"]
     #file_options = ["TrueGoal_TrueLambda"]
     results_file = "Debugging/conv_iSE/basic_debugging/knownLambda_detailDebug/TrueGoal_TrueLambda/final_results.txt"
     
     # Parse the data
     for lambda_val in lambda_options:
-        results_folder = f"Debugging/conv_iSE/basic_debugging/knownLambda_detailDebug"
+        results_folder = f"Debugging/conv_iSE/constantLambda/Tmax_100_FINAL/lambda_{lambda_val}"
         for file_option in file_options:
+            legend_loc = 'upper left'
             results_file = os.path.join(results_folder, file_option, "final_results.txt")
             data = parse_results_file(results_file)
             output_path = os.path.join(results_folder, file_option, "giSE_parameter_analysis.png")
             # Only show legend for TrueGoal_TrueLambda with lambda=0.01
-            show_legend = (lambda_val == "0.01" and file_option == "TrueGoal_TrueLambda")
-            create_plots(data, output_path, show_legend)
+            show_legend = (lambda_val == "0.01" and file_option == "TrueGoal_TrueLambda") or (lambda_val == "0.01" and file_option == "FalseGoal_TrueLambda")
+            if (lambda_val == "0.01" and file_option == "FalseGoal_TrueLambda"):
+                legend_loc = 'upper right'
+            #show_legend = True
+            create_plots(data, output_path, show_legend, legend_loc)
 
     # data = parse_results_file(results_file)
     

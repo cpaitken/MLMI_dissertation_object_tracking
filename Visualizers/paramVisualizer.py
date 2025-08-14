@@ -1,3 +1,8 @@
+## File to plot heatmap for parameter testing of gSE model on UZH-FPV dataset ##
+## Figure 4.6 ##
+## Code for annotation matrix and custom colormap for Improvement plot written by ChatGPT ##
+
+
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,16 +19,6 @@ from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
 def create_annotation_matrix(matrix, show_min_max=True):
-    """
-    Create annotation matrix showing only min/max values or all values.
-    
-    Parameters:
-        matrix: numpy array of values
-        show_min_max: if True, only show min and max values, otherwise show all
-    
-    Returns:
-        annotation_matrix: matrix with strings for annotations
-    """
     annotation_matrix = np.full(matrix.shape, '', dtype=object)
     
     if show_min_max:
@@ -51,9 +46,6 @@ def create_annotation_matrix(matrix, show_min_max=True):
     return annotation_matrix
 
 def create_annotation_matrix_improvement(matrix):
-    """
-    For improvement matrix: show best (highest) and worst (lowest) improvements.
-    """
     annotation_matrix = np.full(matrix.shape, '', dtype=object)
     
     valid_values = matrix[~np.isnan(matrix)]
@@ -72,9 +64,6 @@ def create_annotation_matrix_improvement(matrix):
     return annotation_matrix
 
 def create_annotation_matrix_simple(matrix):
-    """
-    Create annotation matrix showing only min and max values without labels.
-    """
     annotation_matrix = np.full(matrix.shape, '', dtype=object)
     valid_values = matrix[~np.isnan(matrix)]
     if len(valid_values) > 0:
@@ -103,7 +92,7 @@ imp_matrix_filtered = imp_matrix[:, s2_filter]
 # SE Model RMSE
 se_df = pd.DataFrame(se_matrix_filtered, index=ls_vals, columns=s2_vals_filtered)
 se_annot = create_annotation_matrix_simple(se_matrix_filtered)
-plt.figure(figsize=(5, 6))
+plt.figure(figsize=(8, 8))
 sns.heatmap(se_df, annot=se_annot, fmt='', cmap='Reds', square=True, annot_kws={'size': 10})
 #plt.title('SE Model RMSE')
 plt.xlabel('s2')
@@ -114,7 +103,7 @@ plt.show()
 # GSE Model RMSE
 gse_df = pd.DataFrame(gse_matrix_filtered, index=ls_vals, columns=s2_vals_filtered)
 gse_annot = create_annotation_matrix_simple(gse_matrix_filtered)
-plt.figure(figsize=(5, 6))
+plt.figure(figsize=(8, 8))
 sns.heatmap(gse_df, annot=gse_annot, fmt='', cmap='Blues', square=True, annot_kws={'size': 10})
 #plt.title('GSE Model RMSE')
 plt.xlabel('s2')
@@ -128,15 +117,13 @@ imp_annot = create_annotation_matrix_simple(imp_matrix_filtered)
 
 # Create a custom colormap: white for 0 or less, green for positive
 max_improvement = np.nanmax(imp_matrix_filtered)
-# We'll use 256 colors, first color is white, rest are from Greens
 n_colors = 256
 colors = plt.get_cmap('Greens', n_colors)
-# Make a new colormap where the first color is white, rest are Greens
 newcolors = colors(np.linspace(0, 1, n_colors))
 newcolors[0, :] = [1, 1, 1, 1]  # RGBA for white
 custom_green = ListedColormap(newcolors)
 
-# Normalize: all values <=0 map to 0 (white), >0 map to (0, max_improvement)
+
 class ZeroWhiteNormalize(mcolors.Normalize):
     def __init__(self, vmin=None, vmax=None, clip=False):
         super().__init__(vmin, vmax, clip)
@@ -149,7 +136,7 @@ class ZeroWhiteNormalize(mcolors.Normalize):
 
 norm = ZeroWhiteNormalize(vmin=0, vmax=max_improvement)
 
-plt.figure(figsize=(5, 6))
+plt.figure(figsize=(8, 8))
 sns.heatmap(imp_df, annot=imp_annot, fmt='', cmap=custom_green, square=True, norm=norm, cbar_kws={'label': 'Improvement (%)'}, annot_kws={'size': 10})
 #plt.title('GSE Improvement over SE (%)')
 plt.xlabel('s2')

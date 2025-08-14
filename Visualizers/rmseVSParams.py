@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""
-Script to analyze convergence statistics and plot RMSE vs sigma_g for different G_var values
-"""
+## File to plot the RMSE over sigma_g and G_var values for gSE model ##
+## Figure 4.12 ##
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,10 +9,6 @@ import re
 import os
 
 def parse_convergence_statistics(filename):
-    """
-    Parse the convergence statistics text file and extract RMSE data
-    Returns: dictionary with (sigma_g, G_var) as keys and (mean_rmse, std_rmse) as values
-    """
     rmse_data = {}
     
     with open(filename, 'r') as f:
@@ -93,9 +89,6 @@ def plot_rmse_vs_sigma_g(rmse_data, save_path=None):
     plt.show()
 
 def create_summary_table(rmse_data):
-    """
-    Create a summary table of the RMSE data
-    """
     print("RMSE Summary by Parameter Combination:")
     print("=" * 60)
     print(f"{'σ_g':<8} {'G_var':<8} {'Mean RMSE':<12} {'Std RMSE':<12}")
@@ -110,7 +103,7 @@ def create_summary_table(rmse_data):
 
 def main():
     # File path - adjust this to match your file location
-    filename = "Debugging/SE_MultTargets/CSG_PED/Convergence_statistics.txt"
+    filename = "Debugging/SE_MultTargets/Quad_PED/Convergence_statistics.txt"
     
     # Check if file exists
     if not os.path.exists(filename):

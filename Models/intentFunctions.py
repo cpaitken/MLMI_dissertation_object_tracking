@@ -1,3 +1,7 @@
+## File holding functions for different predict and update functions for the gSE and g-iSE models ##
+## Built in the same manner as those in functions.py but with the extensions described in the paper ##
+## Includes functions for generating goal driven tracks and GP Bridging Distribution tracks ##
+
 import numpy as np
 from scipy.stats import norm
 from scipy.linalg import solve, cholesky

@@ -1,3 +1,11 @@
+## File to demonstrate the gSE model vs the SE model on a single trajectory ##
+## Trajectory must be specified in line 15, folder in which to save results in line 16 ##
+## Model parameters to change in lines 24-26 and 30-31 ##
+
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 import matplotlib.pyplot as plt
 import Models.functions as f
@@ -7,19 +15,20 @@ from tqdm import tqdm
 
 #groundtruth = np.load('ground_truth_trajectory.npy') #This is fake for the moment, obviously
 ## THINGS TO ACTUALLY CHANGE ##
-groundtruth_filename = "Data/UZH/Medium/UZH_5.txt" ##CHANGE THIS FOR DATA
-debugging_folder = "Debugging/Generated/SE_DebuggingForLambdaModel_withUZHData"
+groundtruth_filename = "Data/UZH/Easy/UZH_1.txt" ##CHANGE THIS FOR DATA
+debugging_folder = "Debugging/SE_vs_GSE_UZHEXAMPLE"
 UZH=True
 #Model Notes
-notes = "Set goal prior to be 0.0"
+notes = "Retesting file works - False Goal Initialization for UZH"
 
-G_prior = np.array([0.0, 0.0])
+G_prior = np.array([500.0, 500.0])
 G_var = 10000  #Unsure goal initially
+sigma_g=0.01
 initialize_with_truth = True
 
 #Model parameters to change
-s2 = 100
-ls = 20
+s2 = 1000
+ls = 30
 d=5
 
 
@@ -119,7 +128,7 @@ for k in range(Tmax):
     normal_updated_means.append(m_upN.copy())
 #Extended Goal Model
 for k in range(Tmax):
-    m_pred, v_pred, F_goal, P_goal = iF.g_se_pred(t,mk_goal[-1],vk_goal[-1],s2,ls)
+    m_pred, v_pred, F_goal, P_goal = iF.g_se_pred(t,mk_goal[-1],vk_goal[-1],s2,ls, sigma_g)
 
     y = noisy_data[k]
     datum = y
@@ -143,7 +152,7 @@ for k in range(Tmax):
     goal_updated_means.append(m_up.copy())
 
 #Save results for debugging
-save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, X_normal, "Goal-SE", "SE", "ComparisonPlot.png", debugging_folder)
+save_tracking_plot(groundtruth, noisy_data, X_goal, G_goal, "g-SE", "ComparisonPlot.png", debugging_folder, show_Target=True, true_goal=np.array(groundtruth[-1,:]), false_goals=None, XN=X_normal, modelName2="SE")
 save_matrix_arrays_txt(normal_F_aug[:5], goal_F_aug[:5], "transitionMatrices.txt", "F_aug", "F_goal", debugging_folder)
 save_matrix_arrays_txt(normal_P[:5], goal_P[:5], "covarianceMatrices.txt", "P_normal", "P_goal", debugging_folder)
 save_vector_arrays_txt(normal_predicted_means, goal_predicted_means, "predictedMeans.txt", "m_predN", "m_pred", debugging_folder)

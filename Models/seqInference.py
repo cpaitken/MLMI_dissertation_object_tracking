@@ -1,3 +1,5 @@
+## First attempt to incorporate particle filtering in g-iSE model ##
+
 import numpy as np
 from scipy.stats import norm
 from scipy.linalg import solve, cholesky

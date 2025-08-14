@@ -1,6 +1,5 @@
-"""
-Script to analyze convergence statistics and plot RMSE vs sigma_g for different G_var values
-"""
+## File to plot RMSE of gSE model on CSG dataset with either single state set or separate state sets ##
+## Figure 4.13 ##
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,10 +8,6 @@ import re
 import os
 
 def parse_convergence_statistics(filename):
-    """
-    Parse the convergence statistics text file and extract RMSE data
-    Returns: dictionary with (sigma_g, G_var) as keys and (mean_rmse, std_rmse) as values
-    """
     base_rmse_data = {}
     sep_tracking_rmse_data = {}
     
@@ -48,10 +43,6 @@ def parse_convergence_statistics(filename):
 
 
 def plot_comparison_bar_charts(base_rmse_data, sep_tracking_rmse_data):
-    """
-    Create comparison bar charts: two subplots separated by G_var, 
-    each showing base RMSE vs tracking RMSE for different sigma_g values
-    """
     # Get unique values
     sigma_g_values = sorted(list(set([key[0] for key in base_rmse_data.keys()])))
     g_var_values = sorted(list(set([key[1] for key in base_rmse_data.keys()])))

@@ -1,3 +1,7 @@
+## File used to generate either CSG or Quadrant datasets ##
+## Specify if CSG or Quadrant in line 16 ##
+## Currently generating for CSG dataset ##
+
 import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 16})
